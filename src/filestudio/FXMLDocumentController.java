@@ -41,6 +41,11 @@ import java.lang.Runtime;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventType;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.SelectionMode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
@@ -103,6 +108,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     TextField imageUpscaleTextField;
     @FXML
+    ProgressBar diskProgress;
+    @FXML
     ImageView imageUpscaleImageView;
     String archFolder = "";
     //@FXML Button autoGenerateWordToRemove;
@@ -138,6 +145,23 @@ public class FXMLDocumentController implements Initializable {
             diskStringList.add((mdiskInfo.getName() + "-" + Math.round((mdiskInfo.getFreeSpace() / 1024 / 1024) * 100) / 100 + " GB Free"));
         }
         diskList.setItems(diskStringList);
+        diskList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        diskList.getSelectionModel().select(0);
+        //diskList.addEventHandler(EventType.ROOT, eventHandler);
+        diskList.getSelectionModel().selectedItemProperty().addListener(ov -> {
+            DiskInfo di = disksListObservable.get(diskList.getSelectionModel().getSelectedIndex());
+            System.out.println(di.path);
+//            int space = (int) di.disk.getTotalSpace();
+//            int used = (int) di.getUsableSpace() - space;
+            //in work
+            dirProperties.setText(di.path + "\nName: " + di.getName() + "\nTotal Space: " + Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100 + " GB\nFree Space: " + Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100 + " GB");
+            double p = (double) ((Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100) - (Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100)) / 1000;
+            diskProgress.setProgress(p);
+
+            System.out.println((Math.round((di.getUsableSpace() / 1024 / 1024) * 100)));
+            //end
+        });
+
         /*diskList.setCellFactory(new Callback<ListView<DiskInfo>, ListCell<DiskInfo>>(){
             @Override
             public ListCell<DiskInfo> call(ListView<DiskInfo> diskList) {
@@ -145,7 +169,6 @@ public class FXMLDocumentController implements Initializable {
                 //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
         });*/
-
         mainWindowHandle.setOnMousePressed(pressEvent -> {
             mainWindowHandle.setOnMouseDragged(dragEvent -> {
                 mainWindowHandle.getScene().getWindow().setX(dragEvent.getScreenX() - pressEvent.getSceneX());
