@@ -1,5 +1,4 @@
 # File Studio
-**I'M AVAILABLE FOR JOBS**<br>
 **Most of the library code was ported from FileTool (open source library jar)**
 ***
 DISCLOSURE: I did not intend to open source this project but whatever... here it is.<br>
