@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # File Studio
 **Most of the library code was ported from FileTool (open source library jar)**
 ***
@@ -23,3 +24,11 @@ Discord: beatmaker002_34248<br>
 Feel free to reach out.
 ***
 **I'M AVAILABLE FOR JOBS**
+=======
+An advanced file handling tool.
+Bulk renamer etc...
+![File studio video](file studio july 2024.mp4)
+![File studio video](https://youtu.be/khxu1v8QT5M)
+Contributions are highly welcome.
+Please read FS-README.TXT to see what part of the application is not finnished.
+>>>>>>> 978a7cf33c4b73d60e4b41c4361cc764e0a2e18b
