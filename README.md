@@ -19,7 +19,7 @@ PayPpal: custombeats365@gmail.com
 # Reach Out (contacts)
 email: abummoja3@gmail.com || custombeats365@gmail.com
 <br>instagram: codefather3<br>
-Discord: beatmaker002_34248
+Discord: beatmaker002_34248<br>
 Feel free to reach out.
 ***
 **I'M AVAILABLE FOR JOBS**
