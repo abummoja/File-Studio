@@ -23,7 +23,6 @@ email: abummoja3@gmail.com || custombeats365@gmail.com
 Discord: beatmaker002_34248<br>
 Feel free to reach out.
 ***
-**I'M AVAILABLE FOR JOBS**
 =======
 An advanced file handling tool.
 Bulk renamer etc...
