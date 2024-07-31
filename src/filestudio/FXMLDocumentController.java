@@ -45,8 +45,14 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
+//<<<<<<< HEAD
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+//=======
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventType;
+//>>>>>>> refs/remotes/origin/master
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;

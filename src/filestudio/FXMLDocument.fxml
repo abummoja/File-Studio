@@ -23,6 +23,7 @@
                 <Label fx:id="userTitle" layoutX="15.0" layoutY="4.0" text="User:" />
                 <Button id="minimizeButton" layoutX="685.0" mnemonicParsing="false" onAction="#minimize" style="-fx-background-color: yellow;" />
                 <Button id="closeButton" layoutX="714.0" mnemonicParsing="false" onAction="#close" prefHeight="17.0" prefWidth="16.0" style="-fx-background-color: red;" textFill="RED" />
+
                 <Button fx:id="settingsButton" layoutX="611.0" mnemonicParsing="false" onAction="#launchSettings" text="Settings" />
                 <Button fx:id="donateButton" layoutX="491.0" mnemonicParsing="false" onAction="#donateFunc" style="-fx-background-color: dodgerblue;" text="Donate(PayPal)" textFill="WHITE" />
             </children>
@@ -131,6 +132,9 @@
                                                         <Label layoutX="178.0" layoutY="187.0" text="Feel free to donate and support this project. That will motivate me to continue." />
                                                     </children>
                                                 </AnchorPane>
+
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+
                                             </content>
                                         </Tab>
                                         <Tab text="Extractor">
@@ -176,18 +180,21 @@
                                 <Button layoutX="171.0" layoutY="427.0" mnemonicParsing="false" onMouseClicked="#revealImageInExplorer" text="Reveal In File Explorer" />
                                 <Button layoutX="318.0" layoutY="427.0" mnemonicParsing="false" text="Share" />
                                 <Button layoutX="597.0" layoutY="215.0" mnemonicParsing="false" text="Upscale" />
+
                                 <ImageView fitHeight="76.0" fitWidth="76.0" layoutX="635.0" layoutY="278.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@FileStudioWarning.png" />
                                     </image>
                                 </ImageView>
                                 <Label layoutX="582.0" layoutY="365.0" prefHeight="17.0" prefWidth="166.0" text="This Feature Is Under Construction." />
+
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
                 <Tab text="Video Upscale">
                     <content>
+
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <ImageView fitHeight="140.0" fitWidth="140.0" layoutX="309.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
@@ -198,6 +205,9 @@
                                 <Label layoutX="287.0" layoutY="275.0" text="This Feature Is Under Construction." />
                             </children>
                         </AnchorPane>
+
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+
                     </content>
                 </Tab>
             </tabs>
