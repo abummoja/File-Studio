@@ -6,6 +6,7 @@ package filestudio;
 
 //import filetool.FileTool;
 import com.google.gson.Gson;
+import java.awt.Desktop;
 //import filetool.FileMultiplier;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,9 +39,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.lang.Runtime;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.SelectionMode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
@@ -103,8 +111,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     TextField imageUpscaleTextField;
     @FXML
+    ProgressBar diskProgress;
+    @FXML
     ImageView imageUpscaleImageView;
     String archFolder = "";
+    String pd = "https://paypal.com";
     //@FXML Button autoGenerateWordToRemove;
     //@FXML ListView<DiskInfo> diskList;
     ObservableList<DiskInfo> disksListObservable = FXCollections.observableArrayList();
@@ -117,11 +128,11 @@ public class FXMLDocumentController implements Initializable {
     String[] docs, pics, vids, auds, exes, archs;
     Organizer iOrganizer = new Organizer();
     UserSettings uss = new UserSettings();
-    static String audex = "regex:.*(?i:mp3|ogg|avi|wav|flacc|aud|m4a)";
+    static String audex = "regex:.*(?i:mp3|ogg|avi|wav|flacc|aud|m4a|m3u)";
     static String videx = "regex:.*(?i:mp4|mkv|webm|ts|wmp|mov)";
-    static String picex = "regex:.*(?i:jpg|jpeg|png|gif|bmp|jpe|jfif)";
+    static String picex = "regex:.*(?i:jpg|jpeg|png|gif|bmp|jpe|jfif|ico)";
     static String docex = "regex:.*(?i:pdf|doc|txt|pptx|xls|mhtml|html|ppt|mdb|accdb|docx)";
-    static String archex = "regex:.*(?i:zip|rar|7z|aar|jar|gz|tar)";
+    static String archex = "regex:.*(?i:zip|rar|7z|aar|jar|gz|tar|xz|iso)";
     static String appex = "regex:.*(?i:exe|com|apk|bat|msi|iso|app|sh)";
 
     @Override
@@ -138,6 +149,23 @@ public class FXMLDocumentController implements Initializable {
             diskStringList.add((mdiskInfo.getName() + "-" + Math.round((mdiskInfo.getFreeSpace() / 1024 / 1024) * 100) / 100 + " GB Free"));
         }
         diskList.setItems(diskStringList);
+        diskList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        diskList.getSelectionModel().select(0);
+        //diskList.addEventHandler(EventType.ROOT, eventHandler);
+        diskList.getSelectionModel().selectedItemProperty().addListener(ov -> {
+            DiskInfo di = disksListObservable.get(diskList.getSelectionModel().getSelectedIndex());
+            System.out.println(di.path);
+//            int space = (int) di.disk.getTotalSpace();
+//            int used = (int) di.getUsableSpace() - space;
+            //in work
+            dirProperties.setText(di.path + "\nName: " + di.getName() + "\nTotal Space: " + Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100 + " GB\nFree Space: " + Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100 + " GB");
+            double p = (double) ((Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100) - (Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100)) / 1000;
+            diskProgress.setProgress(p);
+
+            System.out.println((Math.round((di.getUsableSpace() / 1024 / 1024) * 100)));
+            //end
+        });
+
         /*diskList.setCellFactory(new Callback<ListView<DiskInfo>, ListCell<DiskInfo>>(){
             @Override
             public ListCell<DiskInfo> call(ListView<DiskInfo> diskList) {
@@ -145,7 +173,6 @@ public class FXMLDocumentController implements Initializable {
                 //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
         });*/
-
         mainWindowHandle.setOnMousePressed(pressEvent -> {
             mainWindowHandle.setOnMouseDragged(dragEvent -> {
                 mainWindowHandle.getScene().getWindow().setX(dragEvent.getScreenX() - pressEvent.getSceneX());
@@ -155,7 +182,74 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    //@param ported from HTML Edit IDE
+    @FXML
+    void donateFunc() {
+        //launch browser with paypal link to donation page.
+
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            try {
+                Desktop.getDesktop().browse(new URI(pd));
+            } catch (URISyntaxException ex) {
+                donateAlert();
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                donateAlert();
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            donateAlert();
+        }
+    }
+
+    void donateAlert() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Browser Error.");
+        alert.setHeaderText("Couldn't Open Browser To: " + pd);
+        alert.setContentText("Thank you for your support, however an error is preventing you from completing donation.");
+        ButtonType yesBtn = new ButtonType("Copy Donation Link To Clipboard");
+        ButtonType noBtn = new ButtonType("Cancel Donation.");
+        alert.getButtonTypes().setAll(yesBtn, noBtn);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == yesBtn) {
+                //copy to clipboard
+            } else if (result.get() == noBtn) {
+                //clode dlg
+            } else {
+                //return;
+            }
+        }
+    }
+
+    @FXML
+    void launchSettings() {
+        //if (!uss.isSettingsPageOpen) {
+        Stage stage = new Stage();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("SettingsUI.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UNDECORATED);
+            Image i = new Image(getClass().getResourceAsStream("FileStudioOtherIcon.png"));
+            stage.getIcons().add(i);
+            stage.setAlwaysOnTop(true);
+            //stage.show();
+            stage.show();
+            SettingsUIController.setStage(stage);
+            uss.isSettingsPageOpen = true;
+            //TO-DO: Hide Settings Button to prevent user from launching two instances of setings since it will cause a bug.
+            //also create public static func to allow settings page to send commend to re enable button on clode
+            //stage.setOnCloseRequest((evt) -> {
+            //Enable settings btn.
+            //System.out.println("Closing settings");
+            //});
+        } catch (Exception e) {
+            System.out.println("Fxml settings err Abu, " + e.getMessage() + e.getCause().toString());
+        }
+        //}
+    }
+
+    // ported from HTML Edit IDE
     public String readFile(String filePathRead) throws IOException {
         // Path p1 = Paths.get(filePathRead);
         // BufferedReader reader = new BufferedReader(new FileReader(filePathRead));
@@ -185,7 +279,7 @@ public class FXMLDocumentController implements Initializable {
         } catch (Exception e) {
         }
     }
-//dir chooser not file chooser
+    //dir chooser not file chooser
 
     public void showFileChooser() {
         DirectoryChooser dirChooser = new DirectoryChooser();

@@ -5,6 +5,9 @@
 package filestudio;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
@@ -12,21 +15,52 @@ import java.util.prefs.Preferences;
  * @author Admin
  */
 public class UserSettings {
+
     static String unm = System.getProperty("user.name");
     final static Preferences pref = Preferences.userNodeForPackage(UserSettings.class);
+    //for easy tracking in case of errors, move the files to 'FileStudio' folder in their respective dir.
     public String mp3dir = pref.get("mp3dir", "C:\\Users\\" + unm + "\\Music\\FileStudio");
-    public String mp4dir = pref.get("mp4dir", "C:\\Users\\" + unm + "\\Videos");
-    public String picdir = pref.get("picdir", "C:\\Users\\" + unm + "\\Pictures");
+    public String mp4dir = pref.get("mp4dir", "C:\\Users\\" + unm + "\\Videos\\FileStudio");
+    public String picdir = pref.get("picdir", "C:\\Users\\" + unm + "\\Pictures\\FileStudio");
     public String archdir = pref.get("archdir", "C:\\Users\\" + unm + "\\Archives\\FileStudio");
     public String appsdir = pref.get("appsdir", "C:\\Users\\" + unm + "\\Apps");
-    public String docsdir = pref.get("docsdir", "C:\\Users\\" + unm + "\\Documents");
+    public String docsdir = pref.get("docsdir", "C:\\Users\\" + unm + "\\Documents\\FileStudio");
     public String[] dirs = {mp3dir, mp4dir, picdir, archdir, appsdir, docsdir};
-    public UserSettings(){
+    public boolean isSettingsPageOpen = false;
+
+    public UserSettings() {
         //constructor
     }
-    public String getDir(String typee){
+
+    public void setDir(String toUpdate, String val) {
+        pref.put(toUpdate, val);//update the prefs.
+    }
+
+    public void resetAll() {
+        //reset to default
+        setDir("mp3dir", "C:\\Users\\" + unm + "\\Music\\FileStudio");
+        setDir("mp4dir", "C:\\Users\\" + unm + "\\Videos\\FileStudio");
+        setDir("picdir", "C:\\Users\\" + unm + "\\Pictures\\FileStudio");
+        setDir("archdir", "C:\\Users\\" + unm + "\\Archives\\FileStudio");
+        setDir("appsdir", "C:\\Users\\" + unm + "\\Apps");
+        setDir("docsdir", "C:\\Users\\" + unm + "\\Documents\\FileStudio");
+        saveSettings();
         createDir(dirs);
-        switch(typee){
+    }
+
+    public void saveSettings() {
+        try {
+            pref.flush();
+            pref.sync();
+        } catch (BackingStoreException ex) {
+            System.out.println("ABU Settings ERR: " + ex.getMessage());
+            Logger.getLogger(UserSettings.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public String getDir(String typee) {
+        createDir(dirs);
+        switch (typee) {
             case "mp3":
                 return mp3dir;
             case "mp4":
@@ -44,12 +78,13 @@ public class UserSettings {
         }
         return null;
     }
-    public void createDir(String[] paths){
-        for(String p:paths){
+
+    public void createDir(String[] paths) {
+        for (String p : paths) {
             File f = new File(p);
-            if(!f.exists()){
+            if (!f.exists()) {
                 f.mkdir();
-            }else{
+            } else {
                 System.out.println("Directory exists!");
             }
         }
