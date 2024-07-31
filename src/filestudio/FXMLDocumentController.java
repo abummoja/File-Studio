@@ -115,7 +115,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     ImageView imageUpscaleImageView;
     String archFolder = "";
-    String pd = "https://paypal.com";
+    String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
     //@FXML Button autoGenerateWordToRemove;
     //@FXML ListView<DiskInfo> diskList;
     ObservableList<DiskInfo> disksListObservable = FXCollections.observableArrayList();
