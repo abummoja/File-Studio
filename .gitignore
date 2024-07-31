@@ -1,0 +1,8 @@
+#ignore nbproject dir
+nbproject
+
+dist
+
+build
+
+*.log

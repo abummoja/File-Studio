@@ -120,6 +120,8 @@ public class FXMLDocumentController implements Initializable {
     ProgressBar diskProgress;
     @FXML
     ImageView imageUpscaleImageView;
+    @FXML
+    Button settingsButton;
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
     //@FXML Button autoGenerateWordToRemove;
@@ -238,21 +240,41 @@ public class FXMLDocumentController implements Initializable {
             stage.initStyle(StageStyle.UNDECORATED);
             Image i = new Image(getClass().getResourceAsStream("FileStudioOtherIcon.png"));
             stage.getIcons().add(i);
-            stage.setAlwaysOnTop(true);
+            //stage.setOnCloseRequest((evt) -> {
+            //updateSettingsAccess();
+            //});
+            //stage.setAlwaysOnTop(true);
             //stage.show();
             stage.show();
             SettingsUIController.setStage(stage);
-            uss.isSettingsPageOpen = true;
+            //updateSettingsAccess();
+            //uss.isSettingsPageOpen = true;
             //TO-DO: Hide Settings Button to prevent user from launching two instances of setings since it will cause a bug.
             //also create public static func to allow settings page to send commend to re enable button on clode
             //stage.setOnCloseRequest((evt) -> {
             //Enable settings btn.
             //System.out.println("Closing settings");
             //});
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Fxml settings err Abu, " + e.getMessage() + e.getCause().toString());
         }
         //}
+    }
+
+    public void updateSettingsAccess() {
+        boolean isSettingsButtonViewable = settingsButton.isVisible();
+        if (isSettingsButtonViewable == true) {
+            settingsButton.setVisible(!isSettingsButtonViewable);
+            settingsButton.setManaged(!isSettingsButtonViewable);
+        } else {
+            settingsButton.setVisible(isSettingsButtonViewable);
+            settingsButton.setManaged(isSettingsButtonViewable);
+        }
+    }
+
+    public static void iUpdateSettingsAccess() {
+        FXMLDocumentController fxd = new FXMLDocumentController();
+        fxd.updateSettingsAccess();
     }
 
     // ported from HTML Edit IDE

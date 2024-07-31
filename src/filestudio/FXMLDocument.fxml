@@ -23,7 +23,6 @@
                 <Label fx:id="userTitle" layoutX="15.0" layoutY="4.0" text="User:" />
                 <Button id="minimizeButton" layoutX="685.0" mnemonicParsing="false" onAction="#minimize" style="-fx-background-color: yellow;" />
                 <Button id="closeButton" layoutX="714.0" mnemonicParsing="false" onAction="#close" prefHeight="17.0" prefWidth="16.0" style="-fx-background-color: red;" textFill="RED" />
-
                 <Button fx:id="settingsButton" layoutX="611.0" mnemonicParsing="false" onAction="#launchSettings" text="Settings" />
                 <Button fx:id="donateButton" layoutX="491.0" mnemonicParsing="false" onAction="#donateFunc" style="-fx-background-color: dodgerblue;" text="Donate(PayPal)" textFill="WHITE" />
             </children>
@@ -132,9 +131,6 @@
                                                         <Label layoutX="178.0" layoutY="187.0" text="Feel free to donate and support this project. That will motivate me to continue." />
                                                     </children>
                                                 </AnchorPane>
-
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-
                                             </content>
                                         </Tab>
                                         <Tab text="Extractor">
@@ -205,9 +201,6 @@
                                 <Label layoutX="287.0" layoutY="275.0" text="This Feature Is Under Construction." />
                             </children>
                         </AnchorPane>
-
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-
                     </content>
                 </Tab>
             </tabs>

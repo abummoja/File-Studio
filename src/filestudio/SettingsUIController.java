@@ -133,7 +133,7 @@ public class SettingsUIController implements Initializable {
     void closeWindow() {
         if (mStage != null) {
             if (!changesMade) {
-                mStage.close();//it works! don't touch it
+                cancelSettings();//it works! don't touch it
                 // uss.isSettingsPageOpen = false;
             } else if (changesMade) {
                 Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -182,6 +182,7 @@ public class SettingsUIController implements Initializable {
         if (mStage != null) {
             //uss.isSettingsPageOpen = false;
             mStage.close();//it works! don't touch it (buggy)
+            //FXMLDocumentController.iUpdateSettingsAccess();
         }
     }
 
