@@ -1,4 +1,5 @@
 # File Studio
+[![Download File-Studio](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/filestudio/files/latest/download)
 **Most of the library code was ported from FileTool (open source library jar)**
 ***
 DISCLOSURE: I did not intend to open source this project but whatever... here it is.<br>
