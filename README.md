@@ -16,8 +16,13 @@ The unfinished parts are the ones that need most attention such as archive handl
 
 An advanced file handling tool.
 Bulk renamer etc...
+![About](https://github.com/user-attachments/assets/c14d997b-8d66-4ac8-b14a-516ac5217e8a)
+![Duplicator](https://github.com/user-attachments/assets/55e3f776-4773-4f46-afc9-472e5362a05c)
+![FileStudio-Banner](https://github.com/user-attachments/assets/d829f7a5-e16a-4185-b7e7-db5817d92523)
+![Organizer](https://github.com/user-attachments/assets/cbf5cef4-6235-4582-b0b2-069495028d4c)
+![WordRemover](https://github.com/user-attachments/assets/8bc171a4-4291-4a04-8a5a-a671cdaa0bca)
 ![File studio video](file studio july 2024.mp4)
 ![File studio video](https://youtu.be/khxu1v8QT5M)
 Contributions are highly welcome.
 Please read FS-README.TXT to see what part of the application is not finnished.
->>>>>>> 978a7cf33c4b73d60e4b41c4361cc764e0a2e18b
+
