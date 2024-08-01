@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # File Studio
 **Most of the library code was ported from FileTool (open source library jar)**
 ***
@@ -14,17 +13,7 @@ The project uses **JavaFX** as it's GUI platform
 Editing will be easy since most of the code is commented and also given obvious names (variables & methods).<br>
 ## What to contribute(code)
 The unfinished parts are the ones that need most attention such as archive handling and image/video upscalling. Also any new features you may have in mind are welcome.<br>**ALSO** Most of the code is in ```FXMLDocumentController.java``` and it's respective ```fxml``` document which has the same name.<br>
-## Financial contributions
-PayPpal: custombeats365@gmail.com
-***
-# Reach Out (contacts)
-email: abummoja3@gmail.com || custombeats365@gmail.com
-<br>instagram: codefather3<br>
-Discord: beatmaker002_34248<br>
-Feel free to reach out.
-***
-**I'M AVAILABLE FOR JOBS**
-=======
+
 An advanced file handling tool.
 Bulk renamer etc...
 ![File studio video](file studio july 2024.mp4)
