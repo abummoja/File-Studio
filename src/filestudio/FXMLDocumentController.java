@@ -52,6 +52,7 @@ import javafx.scene.control.ButtonType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventType;
+import javafx.scene.control.ComboBox;
 //>>>>>>> refs/remotes/origin/master
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
@@ -125,6 +126,11 @@ public class FXMLDocumentController implements Initializable {
     Button settingsButton;
     @FXML
     TextField compressorPath;
+    @FXML
+    TextField compressorDest;
+    @FXML
+    ComboBox compressorType;
+    String[] types = {"zip"};
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
     //@FXML Button autoGenerateWordToRemove;
@@ -163,6 +169,7 @@ public class FXMLDocumentController implements Initializable {
         diskList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         diskList.getSelectionModel().select(0);
         //diskList.addEventHandler(EventType.ROOT, eventHandler);
+        compressorType.getItems().add(types[0]);
         diskList.getSelectionModel().selectedItemProperty().addListener(ov -> {
             DiskInfo di = disksListObservable.get(diskList.getSelectionModel().getSelectedIndex());
             System.out.println(di.path);
@@ -320,6 +327,7 @@ public class FXMLDocumentController implements Initializable {
         activeDir = selectedFolder.getAbsolutePath();
         organizerDirTextField.setText(activeDir);
         compressorPath.setText(activeDir);
+        compressorDest.setText(compressorPath.getText() + ".zip");
     }
 
     //[UNFINISHED&BUGGY] Method to get 'recent directories' list on Welcome Screen
@@ -642,6 +650,12 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void compressorChangeDir() {
+        showFileChooser();
+    }
+
+    public void compressorChangeDest() {
+        //todo: change the path to output zip
+        //show file chooser with correct file type
         showFileChooser();
     }
 }
