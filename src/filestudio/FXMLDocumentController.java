@@ -56,6 +56,7 @@ import javafx.event.EventType;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
 /**
@@ -122,6 +123,8 @@ public class FXMLDocumentController implements Initializable {
     ImageView imageUpscaleImageView;
     @FXML
     Button settingsButton;
+    @FXML
+    TextField compressorPath;
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
     //@FXML Button autoGenerateWordToRemove;
@@ -316,6 +319,7 @@ public class FXMLDocumentController implements Initializable {
         dirProperties.setText(selectedFolder.getAbsolutePath());
         activeDir = selectedFolder.getAbsolutePath();
         organizerDirTextField.setText(activeDir);
+        compressorPath.setText(activeDir);
     }
 
     //[UNFINISHED&BUGGY] Method to get 'recent directories' list on Welcome Screen
@@ -621,5 +625,23 @@ public class FXMLDocumentController implements Initializable {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return;
+    }
+
+    public void compressorStart() throws IOException {
+        if (new File(compressorPath.getText()).exists()) {
+            ArchiveExtractor ext = new ArchiveExtractor();
+            String path = compressorPath.getText();
+            File tDir = new File(path);
+            String outputPath = tDir.getParent() + "\\" + tDir.getName() + ".zip";
+            System.out.println(outputPath);
+            File outputZip = new File(outputPath);
+            ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(outputZip);
+            ext.createZip(zipOut, path);
+            zipOut.close();
+        }
+    }
+
+    public void compressorChangeDir() {
+        showFileChooser();
     }
 }

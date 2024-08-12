@@ -43,6 +43,7 @@ public class ArchiveExtractor {
         this.outputPath = outDir;//the output zip file (can not be changed when compressing)
     }
 
+    //to use this class (zip compression), call this method after creating instance and passing path. not createZip
     public void processFiles() throws IOException {
         File outputZip = new File(outputPath);
         ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(outputZip);

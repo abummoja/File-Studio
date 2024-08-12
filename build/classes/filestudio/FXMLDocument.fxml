@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
@@ -116,20 +117,12 @@
                                         <Tab text="Compressor">
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                    <children>
-                                                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="28.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
-                                                            <image>
-                                                                <Image url="@FileStudioWarning.png" />
-                                                            </image>
-                                                        </ImageView>
-                                                        <Label layoutX="178.0" layoutY="101.0" text="Bear With Me! :(">
-                                                            <font>
-                                                                <Font name="System Bold" size="32.0" />
-                                                            </font>
-                                                        </Label>
-                                                        <Label layoutX="178.0" layoutY="159.0" text="All features under Archiver are still in development. Will be available in next release." />
-                                                        <Label layoutX="178.0" layoutY="187.0" text="Feel free to donate and support this project. That will motivate me to continue." />
-                                                    </children>
+                                       <children>
+                                          <TextField fx:id="compressorPath" layoutX="34.0" layoutY="54.0" prefWidth="510.0" promptText="Path to the folder you want to compress." />
+                                          <Button fx:id="compressorChangeDirBtn" layoutX="560.0" layoutY="54.0" mnemonicParsing="false" onMouseClicked="#compressorChangeDir" text="Select" />
+                                          <ComboBox fx:id="compressorType" layoutX="34.0" layoutY="96.0" prefWidth="150.0" promptText="File Type" />
+                                          <Button fx:id="compressorStartBtn" layoutX="34.0" layoutY="148.0" mnemonicParsing="false" onMouseClicked="#compressorStart" text="Start" />
+                                       </children>
                                                 </AnchorPane>
                                             </content>
                                         </Tab>
