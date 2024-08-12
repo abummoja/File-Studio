@@ -534,13 +534,13 @@ public class FXMLDocumentController implements Initializable {
         }
         archFolder = archName;
         extractorDestinationLabel.setText(toExtract.getParent() + "\\" + archFolder);
-        try {
-            readContents(toExtract.getPath().toString());
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            //readContents(toExtract.getPath().toString());
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public void selectFolderToExtractTo() {

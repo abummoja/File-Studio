@@ -10,8 +10,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -25,8 +29,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
+import org.apache.commons.compress.utils.IOUtils;
 //import org.apache.commons.compress.archivers.zip.
 
 /**
@@ -99,7 +107,12 @@ public class ArchiverController implements Initializable {
     }
 
     public void extract() {
-        extractZip(new File(extractorCurrentFileLabel.getText()));
+        try {
+            xTractZip(new File(extractorCurrentFileLabel.getText()));
+        } catch (IOException ex) {
+            System.out.println("B4 XTRACT: " + ex.getMessage());
+            Logger.getLogger(ArchiverController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         int type = determineFileType();
         //File theFile = new File(path);
         /*switch (type) {
@@ -154,9 +167,12 @@ public class ArchiverController implements Initializable {
 
                     ZipEntry entry;
                     while ((entry = zipInputStream.getNextEntry()) != null) {
+                        System.out.println("Dest ABU: " + destination + zipFile.getParent() + entry.getName().lastIndexOf("\\"));
                         File outputFile = new File(zipFile.getParent(), entry.getName());
                         //todo :add check if is file
                         if (entry.isDirectory()) {
+                            File tDir = new File(entry.getName());
+                            tDir.mkdirs();
                             System.out.println("ABU, Extracting dir: " + entry.getName() + " to " + zipFile.getParent());
                         }
                         System.out.println("ABU, Extracting: " + entry.getName() + " to " + zipFile.getParent());
@@ -184,5 +200,42 @@ public class ArchiverController implements Initializable {
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
+    }
+
+    public void xTractZip(File zipFile) throws IOException {
+        File targetDir = new File(zipFile.getParent());
+        try (ArchiveInputStream i = new ZipArchiveInputStream(new FileInputStream(zipFile))) {
+            ZipArchiveEntry entry = null;
+            while ((entry = (ZipArchiveEntry) i.getNextEntry()) != null) {
+                if (!i.canReadEntryData(entry)) {
+                    // log something?
+                    continue;
+                }
+                //File eName = new File(targetDir.getPath(), entry);
+                String name = fileName(targetDir, entry);
+                System.out.println("AB PATH: " + name);
+                File f = new File(name);
+                if (entry.isDirectory()) {
+                    f.mkdirs();
+                    if (!f.isDirectory() && !f.mkdirs()) {
+                        throw new IOException("D failed to create directory " + f);
+                    }
+                } else {
+                    File parent = f.getParentFile();
+                    if (!parent.isDirectory() && !parent.mkdirs()) {
+                        throw new IOException("P failed to create directory " + parent);
+                    }
+                    try (OutputStream o = Files.newOutputStream(f.toPath())) {
+                        IOUtils.copy(i, o);
+                    }
+                }
+            }
+        }
+    }
+
+    private String fileName(File targetDir, ZipArchiveEntry entry) {
+        File ent = new File(entry.getName());
+        return targetDir.getAbsolutePath() + "\\" + ent.getName();
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
