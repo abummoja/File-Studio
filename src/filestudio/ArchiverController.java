@@ -70,7 +70,7 @@ public class ArchiverController implements Initializable {
         extractorCurrentFileLabel.setText(path);
     }
 
-    private int determineFileType() {
+    public int determineFileType() {
         Pattern pattern = Pattern.compile(archex);
         Matcher matcher = pattern.matcher(extractorCurrentFileLabel.getText());
         if (matcher.matches()) {

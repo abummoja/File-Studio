@@ -45,6 +45,7 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
+import javafx.beans.Observable;
 //<<<<<<< HEAD
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -130,7 +131,7 @@ public class FXMLDocumentController implements Initializable {
     TextField compressorDest;
     @FXML
     ComboBox compressorType;
-    String[] types = {"zip"};
+    String[] types = {".zip", ".tar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz"};
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
     //@FXML Button autoGenerateWordToRemove;
@@ -140,6 +141,7 @@ public class FXMLDocumentController implements Initializable {
     File history;
     String mdata = "";
     String activeDir = "";
+    String ext = ".zip";
     List<File> wordRemoverFileList = new ArrayList<>();
     List<File> generatedList = new ArrayList<>();
     String[] docs, pics, vids, auds, exes, archs;
@@ -169,7 +171,16 @@ public class FXMLDocumentController implements Initializable {
         diskList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         diskList.getSelectionModel().select(0);
         //diskList.addEventHandler(EventType.ROOT, eventHandler);
-        compressorType.getItems().add(types[0]);
+        for (String archType : types) {
+            compressorType.getItems().add(archType);
+        }
+
+        compressorType.getSelectionModel().selectedItemProperty().addListener((Observable ov) -> {
+            int selectedIndex = compressorType.getSelectionModel().getSelectedIndex();
+            ext = types[selectedIndex];
+            System.out.println(ext);
+            //String ext = (String)compressorType.getItems()[compressorType.getSelectionModel().getSelectedIndex()]
+        });
         diskList.getSelectionModel().selectedItemProperty().addListener(ov -> {
             DiskInfo di = disksListObservable.get(diskList.getSelectionModel().getSelectedIndex());
             System.out.println(di.path);
@@ -327,7 +338,7 @@ public class FXMLDocumentController implements Initializable {
         activeDir = selectedFolder.getAbsolutePath();
         organizerDirTextField.setText(activeDir);
         compressorPath.setText(activeDir);
-        compressorDest.setText(compressorPath.getText() + ".zip");
+        compressorDest.setText(selectedFolder.getParent());
     }
 
     //[UNFINISHED&BUGGY] Method to get 'recent directories' list on Welcome Screen
@@ -636,16 +647,39 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void compressorStart() throws IOException {
+        ArchiveExtractor aext = new ArchiveExtractor();
+        String theDir = compressorPath.getText();
+        File theDirObj = new File(theDir);
+        theDir = theDirObj.getAbsolutePath();
+        String outputDir = compressorDest.getText() + "\\" + theDirObj.getName() + ext;
+        System.out.println("TheDir: " + theDir);
+        System.out.println("Compressing to: " + outputDir);
         if (new File(compressorPath.getText()).exists()) {
-            ArchiveExtractor ext = new ArchiveExtractor();
-            String path = compressorPath.getText();
-            File tDir = new File(path);
-            String outputPath = tDir.getParent() + "\\" + tDir.getName() + ".zip";
-            System.out.println(outputPath);
-            File outputZip = new File(outputPath);
-            ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(outputZip);
-            ext.createZip(zipOut, path);
-            zipOut.close();
+            switch (ext) {
+                case ".zip":
+                    ArchiveExtractor bext = new ArchiveExtractor();
+                    String path = compressorPath.getText();
+                    File tDir = new File(path);
+                    String outputPath = tDir.getParent() + "\\" + tDir.getName() + ".zip";
+                    System.out.println(outputPath);
+                    File outputZip = new File(outputPath);
+                    ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(outputZip);
+                    bext.createZip(zipOut, path);
+                    zipOut.close();
+                    break;
+                case ".tar":
+                    aext.createTarFile(theDir, outputDir);
+                    break;
+                case ".tar.xz":
+                    try {
+                        aext.createTarXZFile(theDir, outputDir);
+                    } catch (Exception ex) {
+                        System.out.println("ABU-XZ: " + ex.getMessage());
+                        ex.printStackTrace();
+                    }
+                    break;
+            }
+
         }
     }
 

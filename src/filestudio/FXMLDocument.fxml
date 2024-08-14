@@ -117,14 +117,14 @@
                                         <Tab text="Compressor">
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TextField fx:id="compressorPath" layoutX="34.0" layoutY="54.0" prefWidth="510.0" promptText="Path to the folder you want to compress." />
-                                          <Button fx:id="compressorChangeDirBtn" layoutX="560.0" layoutY="54.0" mnemonicParsing="false" onMouseClicked="#compressorChangeDir" text="Select" />
-                                          <ComboBox fx:id="compressorType" layoutX="34.0" layoutY="152.0" prefWidth="150.0" promptText="File Type" />
-                                          <Button fx:id="compressorStartBtn" layoutX="34.0" layoutY="203.0" mnemonicParsing="false" onMouseClicked="#compressorStart" text="Start" />
-                                          <TextField fx:id="compressorDest" layoutX="35.0" layoutY="103.0" prefWidth="509.0" promptText="The resulting file (full path)" />
-                                          <Button fx:id="compressorDestBtn" layoutX="559.0" layoutY="103.0" mnemonicParsing="false" onMouseClicked="#compressorChangeDest" text="Change" />
-                                       </children>
+                                                    <children>
+                                                        <TextField fx:id="compressorPath" layoutX="34.0" layoutY="54.0" prefWidth="510.0" promptText="Path to the folder you want to compress." />
+                                                        <Button fx:id="compressorChangeDirBtn" layoutX="560.0" layoutY="54.0" mnemonicParsing="false" onMouseClicked="#compressorChangeDir" text="Select" />
+                                                        <ComboBox fx:id="compressorType" layoutX="34.0" layoutY="152.0" prefWidth="150.0" promptText="File Type" />
+                                                        <Button fx:id="compressorStartBtn" layoutX="34.0" layoutY="203.0" mnemonicParsing="false" onMouseClicked="#compressorStart" text="Start" />
+                                                        <TextField fx:id="compressorDest" layoutX="35.0" layoutY="103.0" prefWidth="509.0" promptText="Where to place the resulting file." />
+                                                        <Button fx:id="compressorDestBtn" layoutX="559.0" layoutY="103.0" mnemonicParsing="false" onMouseClicked="#compressorChangeDest" text="Change" />
+                                                    </children>
                                                 </AnchorPane>
                                             </content>
                                         </Tab>
