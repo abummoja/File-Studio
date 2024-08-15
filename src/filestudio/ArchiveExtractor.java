@@ -14,9 +14,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.examples.Archiver;
+import org.apache.commons.compress.archivers.examples.Expander;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -28,6 +33,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.compress.compressors.snappy.FramedSnappyCompressorOutputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.apache.commons.compress.utils.IOUtils;
 
 /**
@@ -214,6 +220,37 @@ public class ArchiveExtractor {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void unarchive(String theFile, String outputDir) {
+        Path arch = Paths.get(theFile);
+        Path outDir = Paths.get(outputDir);
+        try {
+            new Expander().expand(arch, outDir);
+        } catch (IOException ex) {
+            System.out.println("ABU-UNARCH(ioe): " + ex.getMessage());
+            ex.printStackTrace();
+            //Logger.getLogger(ArchiveExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ArchiveException ex) {
+            System.out.println("ABU-UNARCH2(arch-e): " + ex.getMessage());
+            ex.printStackTrace();
+            //Logger.getLogger(ArchiveExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void archive(String theFolder, String destDir) {
+        Path pDir = Paths.get(theFolder);
+        Path pDestDir = Paths.get(destDir);
+        String format = FileNameUtils.getExtension(pDestDir);
+        try {
+            new Archiver().create(format, pDestDir, pDir);
+        } catch (IOException ex) {
+            System.out.println("ABU-ARCH(ioe): " + ex.getMessage());
+            //Logger.getLogger(ArchiveExtractor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ArchiveException ex) {
+            System.out.println("ABU-ARCH(arch-e): " + ex.getMessage());
+            //Logger.getLogger(ArchiveExtractor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

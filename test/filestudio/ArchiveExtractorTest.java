@@ -34,4 +34,13 @@ public class ArchiveExtractorTest {
         zipOut.close();
         assertTrue(Files.exists(Paths.get(outputZip.getPath())));
     }
+
+    @Test
+    void TestArchiver() {
+        ArchiveExtractor ext = new ArchiveExtractor();
+        String theFile, oDir;
+        theFile = "C:\\Users\\Admin\\Downloads\\leetcode-solutions-master.zip";
+        oDir = "C:\\Users\\Admin\\Downloads\\leetsoln";
+        ext.unarchive(theFile, oDir);
+    }
 }
