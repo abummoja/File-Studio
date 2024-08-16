@@ -1,10 +1,10 @@
 #ignore nbproject dir
-nbproject
+nbproject/
 
-dist
+dist/
 
-/build
+build/
 
-scar-1.10
+scar-1.10/
 
 *.log
