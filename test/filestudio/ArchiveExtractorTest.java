@@ -55,4 +55,12 @@ public class ArchiveExtractorTest {
         newFile = "C:\\Users\\Admin\\Downloads\\testarch.tar";
         ext.archive(theDir, newFile);
     }
+
+    @Test//To test wether tar--- works, it might not since it needs to be fed a tar file not a dir.
+    void TestTarXXX() {
+        String theDir, theFile;
+        theDir = "C:\\Users\\Admin\\Downloads\\ABRAHAM 32101";
+        theFile = theDir = "C:\\Users\\Admin\\Downloads\\ABRAHAM.tar.xz";
+        ext.createTarXZFile(theDir, theFile);
+    }
 }

@@ -26,6 +26,7 @@
                 <Button id="closeButton" layoutX="714.0" mnemonicParsing="false" onAction="#close" prefHeight="17.0" prefWidth="16.0" style="-fx-background-color: red;" textFill="RED" />
                 <Button fx:id="settingsButton" layoutX="611.0" mnemonicParsing="false" onAction="#launchSettings" text="Settings" />
                 <Button fx:id="donateButton" layoutX="491.0" mnemonicParsing="false" onAction="#donateFunc" style="-fx-background-color: dodgerblue;" text="Donate(PayPal)" textFill="WHITE" />
+            <Button layoutX="428.0" mnemonicParsing="false" onAction="#updateFunc" text="Update" />
             </children>
         </Pane>
         <TabPane layoutY="38.0" prefHeight="538.0" prefWidth="762.0" styleClass="track" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="38.0">

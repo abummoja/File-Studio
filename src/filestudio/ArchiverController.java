@@ -29,6 +29,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -51,6 +52,8 @@ public class ArchiverController implements Initializable {
     Label extractorCurrentFileLabel;
     @FXML
     ProgressBar extractorProgressBar;
+    @FXML
+    TextArea extractorLogOutput;
 
     /**
      * Initializes the controller class.
@@ -104,6 +107,18 @@ public class ArchiverController implements Initializable {
         } else {
             return 0;
         }
+    }
+
+    //TODO: check format (like in compressor) if multiformat use specific func else if zip or tar use unarchive
+    public void newExtractor() {
+        ArchiveExtractor aex = new ArchiveExtractor();
+        File zipFile = new File(extractorCurrentFileLabel.getText());
+        File targetDir = new File(zipFile.getParent());
+        log("extracting: " + zipFile.getPath());
+        log("to: " + targetDir.getPath());
+        //cannot extract multiform archive ".tar.xxx"
+        aex.unarchive(zipFile.getPath(), targetDir.getPath());
+        log("Done!");
     }
 
     public void extract() {
@@ -237,5 +252,9 @@ public class ArchiverController implements Initializable {
         File ent = new File(entry.getName());
         return targetDir.getAbsolutePath() + "\\" + ent.getName();
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void log(String log) {
+        extractorLogOutput.setText(extractorLogOutput.getText() + "\n" + log);
     }
 }

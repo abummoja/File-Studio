@@ -131,9 +131,10 @@ public class FXMLDocumentController implements Initializable {
     TextField compressorDest;
     @FXML
     ComboBox compressorType;
-    String[] types = {".zip", ".tar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz"};
+    String[] types = {".zip", ".tar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
+    String sfUrl = "https://sourceforge.net/projects/filestudio";//source forge update url
     //@FXML Button autoGenerateWordToRemove;
     //@FXML ListView<DiskInfo> diskList;
     ObservableList<DiskInfo> disksListObservable = FXCollections.observableArrayList();
@@ -212,12 +213,20 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
+    void updateFunc() {
+        openBrowser(sfUrl);
+    }
+
+    @FXML
     void donateFunc() {
         //launch browser with paypal link to donation page.
+        openBrowser(pd);
+    }
 
+    private void openBrowser(String url) {
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
             try {
-                Desktop.getDesktop().browse(new URI(pd));
+                Desktop.getDesktop().browse(new URI(url));
             } catch (URISyntaxException ex) {
                 donateAlert();
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -657,18 +666,17 @@ public class FXMLDocumentController implements Initializable {
         if (new File(compressorPath.getText()).exists()) {
             switch (ext) {
                 case ".zip":
-                    ArchiveExtractor bext = new ArchiveExtractor();
-                    String path = compressorPath.getText();
-                    File tDir = new File(path);
-                    String outputPath = tDir.getParent() + "\\" + tDir.getName() + ".zip";
-                    System.out.println(outputPath);
-                    File outputZip = new File(outputPath);
-                    ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(outputZip);
-                    bext.createZip(zipOut, path);
-                    zipOut.close();
-                    break;
+//                    ArchiveExtractor bext = new ArchiveExtractor();
+//                    String path = compressorPath.getText();
+//                    File tDir = new File(path);
+//                    String outputPath = tDir.getParent() + "\\" + tDir.getName() + ".zip";
+//                    System.out.println(outputPath);
+//                    File outputZip = new File(outputPath);
+//                    ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(outputZip);
+//                    bext.createZip(zipOut, path);
+//                    zipOut.close();
                 case ".tar":
-                    aext.createTarFile(theDir, outputDir);
+                    aext.archive(theDir, outputDir);
                     break;
                 case ".tar.xz":
                     try {
@@ -678,6 +686,18 @@ public class FXMLDocumentController implements Initializable {
                         ex.printStackTrace();
                     }
                     break;
+                //TODO: the ".tar.---" should be fed a tar file in place of "theDir" since they take tar and archive to second format
+                case ".tar.gz":
+                    aext.createTarGZipFile(theDir, outputDir);
+                    break;
+                case ".tar.deflate":
+                    aext.createTarDeflateFile(theDir, outputDir);
+                    break;
+                case ".tar.sz":
+                    aext.createTarSnappyFile(theDir, outputDir);
+                    break;
+                case ".tar.bz2":
+                    aext.createTarBZip2File(theDir, outputDir);
             }
 
         }
