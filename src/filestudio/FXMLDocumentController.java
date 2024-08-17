@@ -48,15 +48,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 import javafx.beans.Observable;
-//<<<<<<< HEAD
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-//=======
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventType;
 import javafx.scene.control.ComboBox;
-//>>>>>>> refs/remotes/origin/master
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -694,16 +691,24 @@ public class FXMLDocumentController implements Initializable {
                     break;
                 //TODO: the ".tar.---" should be fed a tar file in place of "theDir" since they take tar and archive to second format
                 case ".tar.gz":
-                    aext.createTarGZipFile(theDir, outputDir);
+                    aext.archive(theDir, multiFormFirstFile);
+                    aext.createTarGZipFile(multiFormFirstFile, outputDir);
+                    Files.delete(Paths.get(multiFormFirstFile));
                     break;
                 case ".tar.deflate":
-                    aext.createTarDeflateFile(theDir, outputDir);
+                    aext.archive(theDir, multiFormFirstFile);
+                    aext.createTarDeflateFile(multiFormFirstFile, outputDir);
+                    Files.delete(Paths.get(multiFormFirstFile));
                     break;
                 case ".tar.sz":
-                    aext.createTarSnappyFile(theDir, outputDir);
+                    aext.archive(theDir, multiFormFirstFile);
+                    aext.createTarSnappyFile(multiFormFirstFile, outputDir);
+                    Files.delete(Paths.get(multiFormFirstFile));
                     break;
                 case ".tar.bz2":
-                    aext.createTarBZip2File(theDir, outputDir);
+                    aext.archive(theDir, multiFormFirstFile);
+                    aext.createTarBZip2File(multiFormFirstFile, outputDir);
+                    Files.delete(Paths.get(multiFormFirstFile));
             }
 
         }

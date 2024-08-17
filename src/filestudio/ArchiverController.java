@@ -117,6 +117,7 @@ public class ArchiverController implements Initializable {
         log("extracting: " + zipFile.getPath());
         log("to: " + targetDir.getPath());
         //cannot extract multiform archive ".tar.xxx"
+        //TODO: determine if is multiformat then extract approprietely else just unarchive()
         aex.unarchive(zipFile.getPath(), targetDir.getPath());
         log("Done!");
     }

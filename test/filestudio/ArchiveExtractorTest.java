@@ -58,6 +58,8 @@ public class ArchiveExtractorTest {
 
     @Test//To test wether tar--- works, it might not since it needs to be fed a tar file not a dir.
     void TestTarXXX() {
+        //THIS TEST SHOULD BE ABANDONED!! IT REFERS WRONGLY TO METHOD AND WILL PASS BUT THE RES FILE IS EMPTY
+        //the correct way should be create tar then create tarxz then delete tar
         String theDir, theFile;
         theDir = "C:\\Users\\Admin\\Downloads\\maui-samples-main";
         theFile = theDir = "C:\\Users\\Admin\\Downloads\\maui.tar.xz";
