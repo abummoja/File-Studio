@@ -41,6 +41,8 @@ import javafx.stage.StageStyle;
 import java.lang.Runtime;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -134,7 +136,7 @@ public class FXMLDocumentController implements Initializable {
     String[] types = {".zip", ".tar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
-    String sfUrl = "https://sourceforge.net/projects/filestudio";//source forge update url
+    String sfUrl = "https://sourceforge.net/projects/filestudio/";//source forge update url
     //@FXML Button autoGenerateWordToRemove;
     //@FXML ListView<DiskInfo> diskList;
     ObservableList<DiskInfo> disksListObservable = FXCollections.observableArrayList();
@@ -661,6 +663,7 @@ public class FXMLDocumentController implements Initializable {
         File theDirObj = new File(theDir);
         theDir = theDirObj.getAbsolutePath();
         String outputDir = compressorDest.getText() + "\\" + theDirObj.getName() + ext;
+        String multiFormFirstFile = compressorDest.getText() + "\\" + theDirObj.getName() + ".tar";
         System.out.println("TheDir: " + theDir);
         System.out.println("Compressing to: " + outputDir);
         if (new File(compressorPath.getText()).exists()) {
@@ -679,12 +682,15 @@ public class FXMLDocumentController implements Initializable {
                     aext.archive(theDir, outputDir);
                     break;
                 case ".tar.xz":
+                    aext.archive(theDir, multiFormFirstFile);
+                    //String tarFileToXZ = multiFormFirstFile + ".xz";
                     try {
-                        aext.createTarXZFile(theDir, outputDir);
+                        aext.createTarXZFile(multiFormFirstFile, outputDir);
                     } catch (Exception ex) {
-                        System.out.println("ABU-XZ: " + ex.getMessage());
+                        System.out.println("ABU-XZ-MF: " + ex.getMessage());
                         ex.printStackTrace();
                     }
+                    Files.delete(Paths.get(multiFormFirstFile));
                     break;
                 //TODO: the ".tar.---" should be fed a tar file in place of "theDir" since they take tar and archive to second format
                 case ".tar.gz":
