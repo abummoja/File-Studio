@@ -271,22 +271,23 @@ public class FXMLDocumentController implements Initializable {
     }
 
     void showNotification(String title, String msg) {
-        if (SystemTray.isSupported()) {
-            SystemTray sysTray = SystemTray.getSystemTray();
-            java.awt.Image img = Toolkit.getDefaultToolkit().createImage(getClass().getResourceAsStream("FileStudioOtherIcon.png").toString());
-            TrayIcon ti = new TrayIcon(img, "File Studio");
-            ti.setImageAutoSize(true);
-            ti.setToolTip("Automation Tool");
-            try {
-                sysTray.add(ti);
-                ti.displayMessage(title, msg, TrayIcon.MessageType.INFO);
-            } catch (AWTException e) {
-                System.out.println("ABU-NOTIF: " + e.getMessage());
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Systray unsupported");
-        }
+        System.out.println(title + msg);
+//        if (SystemTray.isSupported()) {
+//            SystemTray sysTray = SystemTray.getSystemTray();
+//            java.awt.Image img = Toolkit.getDefaultToolkit().createImage(getClass().getResourceAsStream("FileStudioOtherIcon.png").toString());
+//            TrayIcon ti = new TrayIcon(img, "File Studio");
+//            ti.setImageAutoSize(true);
+//            ti.setToolTip("Automation Tool");
+//            try {
+//                sysTray.add(ti);
+//                ti.displayMessage(title, msg, TrayIcon.MessageType.INFO);
+//            } catch (AWTException e) {
+//                System.out.println("ABU-NOTIF: " + e.getMessage());
+//                e.printStackTrace();
+//            }
+//        } else {
+//            System.out.println("Systray unsupported");
+//        }
     }
 
     @FXML
