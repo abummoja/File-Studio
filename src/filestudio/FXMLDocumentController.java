@@ -6,7 +6,13 @@ package filestudio;
 
 //import filetool.FileTool;
 import com.google.gson.Gson;
+import java.awt.AWTException;
 import java.awt.Desktop;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 //import filetool.FileMultiplier;
 import java.io.File;
 import java.io.FileInputStream;
@@ -130,7 +136,7 @@ public class FXMLDocumentController implements Initializable {
     TextField compressorDest;
     @FXML
     ComboBox compressorType;
-    String[] types = {".zip", ".tar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
+    String[] types = {".zip", ".tar", ".gz", ".7z", ".rar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
     String sfUrl = "https://sourceforge.net/projects/filestudio/";//source forge update url
@@ -227,34 +233,59 @@ public class FXMLDocumentController implements Initializable {
             try {
                 Desktop.getDesktop().browse(new URI(url));
             } catch (URISyntaxException ex) {
-                donateAlert();
+                donateAlert(url);
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                donateAlert();
+                donateAlert(url);
                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            donateAlert();
+            donateAlert(url);
         }
     }
 
-    void donateAlert() {
+    void donateAlert(String url) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Browser Error.");
-        alert.setHeaderText("Couldn't Open Browser To: " + pd);
-        alert.setContentText("Thank you for your support, however an error is preventing you from completing donation.");
-        ButtonType yesBtn = new ButtonType("Copy Donation Link To Clipboard");
-        ButtonType noBtn = new ButtonType("Cancel Donation.");
+        alert.setHeaderText("Couldn't Open Browser");
+        alert.setContentText("Please check that you have a browser or permissions.");
+        ButtonType yesBtn = new ButtonType("Copy Link To Clipboard");
+        ButtonType noBtn = new ButtonType("Close");
         alert.getButtonTypes().setAll(yesBtn, noBtn);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent()) {
             if (result.get() == yesBtn) {
                 //copy to clipboard
+                StringSelection sel = new StringSelection(url);
+                Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+                cb.setContents(sel, null);
+                showNotification("FileStudio", "Link copied to clipboard!");
             } else if (result.get() == noBtn) {
                 //clode dlg
+                alert.close();
             } else {
                 //return;
+                alert.close();
             }
+        }
+    }
+
+    void showNotification(String title, String msg) {
+        if (SystemTray.isSupported()) {
+            SystemTray sysTray = SystemTray.getSystemTray();
+            java.awt.Image img = Toolkit.getDefaultToolkit().createImage(getClass().getResourceAsStream("FileStudioOtherIcon.png").toString());
+            TrayIcon ti = new TrayIcon(img, "File Studio");
+            ti.setImageAutoSize(true);
+            ti.setToolTip("Automation Tool");
+            try {
+                sysTray.add(ti);
+                ti.displayMessage(title, msg, TrayIcon.MessageType.INFO);
+            } catch (AWTException e) {
+                System.out.println("ABU-NOTIF: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Systray unsupported");
         }
     }
 
@@ -330,6 +361,7 @@ public class FXMLDocumentController implements Initializable {
 
     public void minimize() {
         //mINIMIZE THE WINDOW
+        showNotification("FileStudio:CustomWindow", "Minimized custom GUI");
         try {
             Stage st = (Stage) userTitle.getScene().getWindow();
             st.setIconified(true);
@@ -483,6 +515,7 @@ public class FXMLDocumentController implements Initializable {
         String dirToOrganize = organizerDirTextField.getText();
         if (dirToOrganize.equals("") || dirToOrganize.equals(null)) {
             //warn user
+            showNotification("FileStudio:Organizer", "Null directory!");
             return;
         }
         try {
@@ -504,12 +537,14 @@ public class FXMLDocumentController implements Initializable {
             archs = iOrganizer.iterateAndFilter(dirToOrganize, archex);
             organizerPreviewText.setText(organizerPreviewText.getText() + archs.length + " compressed (archived) files.");
             Organizer.clearList();
+            showNotification("FileStudio:Organizer", "Finished processing dir.");
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void organizeDir() {
+        showNotification("FileStudio:Organizer", "Organizing dir...");
         try {
             iOrganizer.moveFi(uss.getDir("aar"), archs);
             //orgCmplete.setText("Moved: " + zips.length + " archives");
@@ -524,6 +559,7 @@ public class FXMLDocumentController implements Initializable {
             iOrganizer.moveFi(uss.getDir("pic"), pics);
             //orgCmplete.setText(orgCmplete.getText() + "\nMoved: " + pics.length + " pics");
             //orgCmplete.setText("Success!");
+            showNotification("FileStudio:Organizer", "Organized!");
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
             //orgCmplete.setText(ex.getMessage());
@@ -655,6 +691,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void compressorStart() throws IOException {
+        showNotification("FileStudio:Archiver", "Compressing...");
         ArchiveExtractor aext = new ArchiveExtractor();
         String theDir = compressorPath.getText();
         File theDirObj = new File(theDir);
@@ -666,6 +703,9 @@ public class FXMLDocumentController implements Initializable {
         if (new File(compressorPath.getText()).exists()) {
             switch (ext) {
                 case ".zip":
+                case ".7z":
+                case ".gz":
+                case ".rar":
 //                    ArchiveExtractor bext = new ArchiveExtractor();
 //                    String path = compressorPath.getText();
 //                    File tDir = new File(path);

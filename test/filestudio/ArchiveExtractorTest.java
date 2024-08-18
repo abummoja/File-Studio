@@ -65,4 +65,10 @@ public class ArchiveExtractorTest {
         theFile = theDir = "C:\\Users\\Admin\\Downloads\\maui.tar.xz";
         ext.createTarXZFile(theDir, theFile);
     }
+
+    @Test
+    void notificationTest() {
+        FXMLDocumentController fxm = new FXMLDocumentController();
+        fxm.showNotification("Test", "Testing...");
+    }
 }

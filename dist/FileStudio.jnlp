@@ -9,12 +9,12 @@ organizing folders & files, and more!</description>
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="FileStudio.jar" size="86480" download="eager" />
-    <jar href="lib\commons-compress-1.25.0-javadoc.jar" size="4929231" download="eager" />
-    <jar href="lib\commons-compress-1.25.0.jar" size="1150000" download="eager" />
-    <jar href="lib\gson-2.8.6.jar" size="260673" download="eager" />
-    <jar href="lib\xz-1.10.jar" size="183512" download="eager" />
-    <jar href="lib\zstd-jni-1.5.6-4.jar" size="6694361" download="eager" />
+    <jar href="FileStudio.jar" size="87382" download="eager" />
+    <jar href="lib\commons-compress-1.25.0-javadoc.jar" size="4929229" download="eager" />
+    <jar href="lib\commons-compress-1.25.0.jar" size="1149997" download="eager" />
+    <jar href="lib\gson-2.8.6.jar" size="260668" download="eager" />
+    <jar href="lib\xz-1.10.jar" size="183509" download="eager" />
+    <jar href="lib\zstd-jni-1.5.6-4.jar" size="6694357" download="eager" />
   </resources>
 <security>
   <all-permissions/>
