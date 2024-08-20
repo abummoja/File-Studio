@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="mainWindowHandle" prefHeight="576.0" prefWidth="762.0" style="-fx-border-color: dodgerblue;" styleClass="linear-grad" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="filestudio.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="mainWindowHandle" prefHeight="598.0" prefWidth="762.0" style="-fx-border-color: dodgerblue;" styleClass="linear-grad" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="filestudio.FXMLDocumentController">
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
         <Pane fx:id="mainWindowHandleMini" layoutX="11.0" layoutY="14.0" prefHeight="24.0" prefWidth="740.0" styleClass="cell" AnchorPane.bottomAnchor="538.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="14.0">
@@ -26,7 +26,7 @@
                 <Button id="closeButton" layoutX="714.0" mnemonicParsing="false" onAction="#close" prefHeight="17.0" prefWidth="16.0" style="-fx-background-color: red;" textFill="RED" />
                 <Button fx:id="settingsButton" layoutX="611.0" mnemonicParsing="false" onAction="#launchSettings" text="Settings" />
                 <Button fx:id="donateButton" layoutX="491.0" mnemonicParsing="false" onAction="#donateFunc" style="-fx-background-color: dodgerblue;" text="Donate(PayPal)" textFill="WHITE" />
-            <Button layoutX="428.0" mnemonicParsing="false" onAction="#updateFunc" text="Update" />
+                <Button layoutX="428.0" mnemonicParsing="false" onAction="#updateFunc" text="Update" />
             </children>
         </Pane>
         <TabPane layoutY="38.0" prefHeight="538.0" prefWidth="762.0" styleClass="track" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="38.0">
@@ -65,7 +65,7 @@
                 </Tab>
                 <Tab text="Renamer">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="485.0" prefWidth="758.0">
                             <children>
                                 <TextField fx:id="wordToRemoveLabel" alignment="CENTER" layoutX="104.0" layoutY="14.0" onInputMethodTextChanged="#search" onKeyTyped="#search" prefHeight="25.0" prefWidth="554.0" promptText="Enter word to remove" />
                                 <TextField fx:id="wordToReplaceLabel" alignment="CENTER" layoutX="104.0" layoutY="53.0" prefHeight="25.0" prefWidth="555.0" promptText="Enter word to replace it with or leave blank to just remove" />
@@ -169,17 +169,16 @@
                                 <TextField editable="false" layoutX="597.0" layoutY="70.0" promptText="Original Resolution" />
                                 <CheckBox layoutX="597.0" layoutY="170.0" mnemonicParsing="false" text="Replace Original" />
                                 <Button layoutX="43.0" layoutY="427.0" mnemonicParsing="false" onMouseClicked="#openGallery" text="Preview In Gallery" />
-                                <Button layoutX="171.0" layoutY="427.0" mnemonicParsing="false" onMouseClicked="#revealImageInExplorer" text="Reveal In File Explorer" />
+                                <Button fx:id="upscaledPreviewBtn" layoutX="171.0" layoutY="427.0" mnemonicParsing="false" onMouseClicked="#viewUpscaledImage" text="View Upscaled" />
                                 <Button layoutX="318.0" layoutY="427.0" mnemonicParsing="false" text="Share" />
-                                <Button layoutX="597.0" layoutY="215.0" mnemonicParsing="false" text="Upscale" />
+                                <Button layoutX="597.0" layoutY="215.0" mnemonicParsing="false" onMouseClicked="#upscaleImage" text="Upscale" />
 
                                 <ImageView fitHeight="76.0" fitWidth="76.0" layoutX="635.0" layoutY="278.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@FileStudioWarning.png" />
                                     </image>
                                 </ImageView>
-                                <Label layoutX="582.0" layoutY="365.0" prefHeight="17.0" prefWidth="166.0" text="This Feature Is Under Construction." />
-
+                                <Label layoutX="582.0" layoutY="365.0" prefHeight="17.0" prefWidth="166.0" text="Supports only JPG output currently" />
                             </children>
                         </AnchorPane>
                     </content>

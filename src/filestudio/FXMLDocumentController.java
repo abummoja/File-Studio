@@ -13,6 +13,7 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.image.BufferedImage;
 //import filetool.FileMultiplier;
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,9 +63,11 @@ import javafx.event.EventType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
+import javax.imageio.ImageIO;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
+import org.imgscalr.Scalr;
 
 /**
  * This is the entry point/main class
@@ -136,6 +139,12 @@ public class FXMLDocumentController implements Initializable {
     TextField compressorDest;
     @FXML
     ComboBox compressorType;
+    @FXML
+    TextField imgUpNotif;
+    @FXML
+    TextField compressorNotif;
+    @FXML
+    Button upscaledPreviewBtn;
     String[] types = {".zip", ".tar", ".gz", ".7z", ".rar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
@@ -153,6 +162,7 @@ public class FXMLDocumentController implements Initializable {
     String[] docs, pics, vids, auds, exes, archs;
     Organizer iOrganizer = new Organizer();
     UserSettings uss = new UserSettings();
+    String uimgpath;
     static String audex = "regex:.*(?i:mp3|ogg|avi|wav|flacc|aud|m4a|m3u)";
     static String videx = "regex:.*(?i:mp4|mkv|webm|ts|wmp|mov)";
     static String picex = "regex:.*(?i:jpg|jpeg|png|gif|bmp|jpe|jfif|ico)";
@@ -226,6 +236,10 @@ public class FXMLDocumentController implements Initializable {
     void donateFunc() {
         //launch browser with paypal link to donation page.
         openBrowser(pd);
+    }
+
+    public void upscaleImage() {
+        upscalePic(imageUpscaleTextField.getText());
     }
 
     private void openBrowser(String url) {
@@ -693,6 +707,7 @@ public class FXMLDocumentController implements Initializable {
 
     public void compressorStart() throws IOException {
         showNotification("FileStudio:Archiver", "Compressing...");
+        //notify(compressorNotif, "Compressing...");
         ArchiveExtractor aext = new ArchiveExtractor();
         String theDir = compressorPath.getText();
         File theDirObj = new File(theDir);
@@ -701,6 +716,7 @@ public class FXMLDocumentController implements Initializable {
         String multiFormFirstFile = compressorDest.getText() + "\\" + theDirObj.getName() + ".tar";
         System.out.println("TheDir: " + theDir);
         System.out.println("Compressing to: " + outputDir);
+        //notify(compressorNotif, "Almost There...");
         if (new File(compressorPath.getText()).exists()) {
             switch (ext) {
                 case ".zip":
@@ -751,7 +767,7 @@ public class FXMLDocumentController implements Initializable {
                     aext.createTarBZip2File(multiFormFirstFile, outputDir);
                     Files.delete(Paths.get(multiFormFirstFile));
             }
-
+            //notify(compressorNotif, "Done!");
         }
     }
 
@@ -763,5 +779,59 @@ public class FXMLDocumentController implements Initializable {
         //todo: change the path to output zip
         //show file chooser with correct file type
         showFileChooser();
+    }
+
+    public void viewUpscaledImage() {
+        //String imagePath = imageUpscaleTextField.getText();
+        String command = "explorer.exe \"" + uimgpath + "\"";
+        Process proc;
+        int exitcode;
+        if (uimgpath != null && (new File(uimgpath).exists()))
+            try {
+            proc = Runtime.getRuntime().exec(command);
+            exitcode = proc.waitFor();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return;
+    }
+
+    public static BufferedImage upscaleImage(BufferedImage originalImage, int newWidth, int newHeight) {
+        // Use Imgscalr to resize the image
+        return Scalr.resize(originalImage, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_EXACT, newWidth, newHeight);
+    }
+
+    private void upscalePic(String text) {
+        //notify(imgUpNotif, "Please wait...");
+        try {
+            // Load the original image from file
+            File inputFile = new File(text);
+            BufferedImage originalImage = ImageIO.read(inputFile);
+
+            // Define the new dimensions (e.g., scale up by 2x)
+            int newWidth = originalImage.getWidth() * 2;
+            int newHeight = originalImage.getHeight() * 2;
+
+            // Upscale the image using Imgscalr
+            BufferedImage upscaledImage = upscaleImage(originalImage, newWidth, newHeight);
+
+            // Save the upscaled image to a new file
+            File outputFile = new File(inputFile.getParent() + "\\" + inputFile.getName() + "_upscaled.jpg");
+            uimgpath = outputFile.getPath();
+            ImageIO.write(upscaledImage, "jpg", outputFile);
+            //notify(imgUpNotif, "Finished Upscaling!");
+            //System.out.println("Image upscaled successfully!");
+        } catch (IOException e) {
+            //notify(imgUpNotif, "Failed to upscale");
+            System.out.println("ABU-UPSCALER: " + e.getMessage());
+            e.printStackTrace();
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void notify(TextField tf, String msg) {
+        tf.setText(msg);
     }
 }
