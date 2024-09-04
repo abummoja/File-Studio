@@ -13,30 +13,36 @@ import javax.swing.filechooser.FileSystemView;
  * @author Admin
  */
 public class DiskInfo {
+
     public String path;//disk name also
     File disk = new File("C:");
-    
-    public DiskInfo(String path){
+
+    public DiskInfo(String path) {
         this.path = path;
-        disk = new File(path);
+        this.disk = new File(path);
     }
-    
-    public double getTotalSpace(){
-        return (double)disk.getTotalSpace()/1073741824;
+
+    public double getTotalSpace() {
+        return (double) disk.getTotalSpace() / 1073741824;
     }
-    public double getFreeSpace(){
-        return (double)disk.getFreeSpace()/1024;
+
+    public double getFreeSpace() {
+        return (double) disk.getFreeSpace() / 1024;
     }
-    public double getUsableSpace(){
-        return (double)disk.getUsableSpace()/1073741824;
+
+    public double getUsableSpace() {
+        return (double) disk.getUsableSpace() / 1073741824;
     }
-    public String getName(){
+
+    public String getName() {
         return FileSystemView.getFileSystemView().getSystemDisplayName(disk);
     }
-    public String getDescription(){
+
+    public String getDescription() {
         return FileSystemView.getFileSystemView().getSystemTypeDescription(disk);
     }
-    public Icon getIcon(){
+
+    public Icon getIcon() {
         return FileSystemView.getFileSystemView().getSystemIcon(disk);
     }
 }

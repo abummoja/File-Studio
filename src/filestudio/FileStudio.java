@@ -23,7 +23,7 @@ public class FileStudio extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         //TO-DO: Read prefs to check if user has selected newUI or just launch old Ui
-        //if prefs newui...try...else try...
+        //if prefs newui(...try(load newui))else (try...old ui)
         try {
             Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
             Scene scene = new Scene(root);

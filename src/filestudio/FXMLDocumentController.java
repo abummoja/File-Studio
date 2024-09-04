@@ -61,8 +61,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.input.MouseEvent;
 import javax.imageio.ImageIO;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
@@ -145,6 +148,12 @@ public class FXMLDocumentController implements Initializable {
     TextField compressorNotif;
     @FXML
     Button upscaledPreviewBtn;
+    @FXML
+    TextField currentImageSizeTF;
+    @FXML
+    TextField newImageResTF;
+    @FXML
+    Button mainMenuBtn;
     String[] types = {".zip", ".tar", ".gz", ".7z", ".rar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
@@ -169,6 +178,7 @@ public class FXMLDocumentController implements Initializable {
     static String docex = "regex:.*(?i:pdf|doc|txt|pptx|xls|mhtml|html|ppt|mdb|accdb|docx)";
     static String archex = "regex:.*(?i:zip|rar|7z|aar|jar|gz|tar|xz|iso)";
     static String appex = "regex:.*(?i:exe|com|apk|bat|msi|iso|app|sh)";
+    private String[] menuOptions = {"Share", "Update", "Help", "About"};
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -190,7 +200,31 @@ public class FXMLDocumentController implements Initializable {
         for (String archType : types) {
             compressorType.getItems().add(archType);
         }
-
+        ContextMenu ctxMnu = new ContextMenu();
+        //MenuItem[] miArr = {};
+        MenuItem shareMenu = new MenuItem("Share");
+        MenuItem helpMenu = new MenuItem("Help");
+        MenuItem updateMenu = new MenuItem("Update");
+        MenuItem aboutMnu = new MenuItem("About");
+        ctxMnu.getItems().addAll(shareMenu, helpMenu, updateMenu, aboutMnu);
+        mainMenuBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            ctxMnu.show(mainMenuBtn, event.getScreenX(), event.getScreenY());
+        });
+        for (MenuItem mi : ctxMnu.getItems()) {
+            mi.addEventHandler(EventType.ROOT, eventHandler -> {
+                System.out.println(mi.getText());
+                switch (mi.getText()) {
+                    case "Share":
+                        break;
+                    case "Help":
+                        break;
+                    case "Update":
+                        break;
+                    case "About":
+                        break;
+                }
+            });
+        }
         compressorType.getSelectionModel().selectedItemProperty().addListener((Observable ov) -> {
             int selectedIndex = compressorType.getSelectionModel().getSelectedIndex();
             ext = types[selectedIndex];
@@ -200,8 +234,8 @@ public class FXMLDocumentController implements Initializable {
         diskList.getSelectionModel().selectedItemProperty().addListener(ov -> {
             DiskInfo di = disksListObservable.get(diskList.getSelectionModel().getSelectedIndex());
             System.out.println(di.path);
-//            int space = (int) di.disk.getTotalSpace();
-//            int used = (int) di.getUsableSpace() - space;
+            int space = (int) di.disk.getTotalSpace();
+            int used = (int) di.getUsableSpace() - space;
             //in work
             dirProperties.setText(di.path + "\nName: " + di.getName() + "\nTotal Space: " + Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100 + " GB\nFree Space: " + Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100 + " GB");
             double p = (double) ((Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100) - (Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100)) / 1000;
@@ -664,6 +698,10 @@ public class FXMLDocumentController implements Initializable {
             try {
                 Image i = new Image(new FileInputStream(toExtract.getPath()));
                 imageUpscaleImageView.setImage(i);
+                BufferedImage bi = ImageIO.read(toExtract);
+                int width = bi.getWidth();
+                int height = bi.getHeight();
+                currentImageSizeTF.setText(width + "x" + height);
                 //[Fri,Mar-8-2024]Last run failed with --> Can't open image: java.lang.IllegalArgumentException: Invalid URL: unknown protocol: c
             } catch (Exception e) {
                 System.out.println("Can't open image: " + e);
@@ -816,7 +854,9 @@ public class FXMLDocumentController implements Initializable {
 
             // Upscale the image using Imgscalr
             BufferedImage upscaledImage = upscaleImage(originalImage, newWidth, newHeight);
-
+            int width = upscaledImage.getWidth();
+            int height = upscaledImage.getHeight();
+            newImageResTF.setText(width + "x" + height);
             // Save the upscaled image to a new file
             File outputFile = new File(inputFile.getParent() + "\\" + inputFile.getName() + "_upscaled.jpg");
             uimgpath = outputFile.getPath();
