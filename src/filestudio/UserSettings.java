@@ -29,7 +29,7 @@ public class UserSettings {
     public boolean isSettingsPageOpen = false;
 
     public UserSettings() {
-        //constructor
+        // empty constructor
     }
 
     public void setDir(String toUpdate, String val) {

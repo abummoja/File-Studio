@@ -219,6 +219,7 @@ public class FXMLDocumentController implements Initializable {
                     case "Help":
                         break;
                     case "Update":
+                        updateFunc();
                         break;
                     case "About":
                         break;
@@ -236,13 +237,19 @@ public class FXMLDocumentController implements Initializable {
             System.out.println(di.path);
             int space = (int) di.disk.getTotalSpace();
             int used = (int) di.getUsableSpace() - space;
-            //in work
             dirProperties.setText(di.path + "\nName: " + di.getName() + "\nTotal Space: " + Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100 + " GB\nFree Space: " + Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100 + " GB");
             double p = (double) ((Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100) - (Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100)) / 1000;
             diskProgress.setProgress(p);
 
-            System.out.println((Math.round((di.getUsableSpace() / 1024 / 1024) * 100)));
-            //end
+            //System.out.println((Math.round((di.getUsableSpace() / 1024 / 1024) * 100)));
+        });
+        histList.getSelectionModel().selectedItemProperty().addListener(listener -> {
+            String ss = histList.getSelectionModel().getSelectedItem();
+            dirProperties.setText(ss);
+            activeDir = ss;
+            organizerDirTextField.setText(activeDir);
+            compressorPath.setText(activeDir);
+            compressorDest.setText(new File(ss).getParent());
         });
 
         /*diskList.setCellFactory(new Callback<ListView<DiskInfo>, ListCell<DiskInfo>>(){
@@ -419,6 +426,7 @@ public class FXMLDocumentController implements Initializable {
     }
     //dir chooser not file chooser
 
+    // THE MAIN FILE CHOOSER
     public void showFileChooser() {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setInitialDirectory(new File("C://Users/" + Util.user));
@@ -428,37 +436,34 @@ public class FXMLDocumentController implements Initializable {
         organizerDirTextField.setText(activeDir);
         compressorPath.setText(activeDir);
         compressorDest.setText(selectedFolder.getParent());
+        JsonHandler jh = new JsonHandler();
+        List<String> sel = new ArrayList<>();
+        sel.add(activeDir);
+        jh.writeToJson(sel);
+        checkHistory();
     }
 
     //[UNFINISHED&BUGGY] Method to get 'recent directories' list on Welcome Screen
     public void checkHistory() {
-        File folder = new File("C://" + Util.user + "/Documents/FileStudio/");
-        if (!folder.exists()) {
-            try {
-                folder.createNewFile();
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            //load json data into listview.
+            /**
+             * mdata = readFile(history.getAbsolutePath()); Gson gson = new
+             * Gson(); HistoryItem[] historyArr = gson.fromJson(mdata,
+             * HistoryItem[].class); for (HistoryItem item : historyArr) {
+             * histList.getItems().add(item.path); }*
+             */
+            JsonHandler jh = new JsonHandler();
+            List<String> hist = jh.readFromJson();
+            if (hist.isEmpty()) {
+                histList.getItems().add("empty list");
+                return;
             }
-        }
-        history = new File(folder.getAbsolutePath() + "/history.json");
-        if (!history.exists()) {
-            try {
-                history.createNewFile();
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            for (String s : hist) {
+                histList.getItems().add(s);
             }
-        } else if (history.exists()) {
-            try {
-                //load json data into listview.
-                mdata = readFile(history.getAbsolutePath());
-                Gson gson = new Gson();
-                HistoryItem[] historyArr = gson.fromJson(mdata, HistoryItem[].class);
-                for (HistoryItem item : historyArr) {
-                    histList.getItems().add(item.path);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } catch (Exception ex) {
+            histList.getItems().add("error while loading");
         }
     }
 
