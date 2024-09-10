@@ -30,8 +30,7 @@
                     </font>
                 </Button>
                 <Button fx:id="donateButton" layoutX="541.0" mnemonicParsing="false" onAction="#donateFunc" style="-fx-background-color: dodgerblue;" text="Donate(PayPal)" textFill="WHITE" />
-                <Button layoutX="476.0" mnemonicParsing="false" onAction="#updateFunc" text="Update" />
-                <Button fx:id="mainMenuBtn" layoutX="437.0" mnemonicParsing="false" text="">
+                <Button fx:id="mainMenuBtn" layoutX="504.0" mnemonicParsing="false" text="">
                     <font>
                         <Font name="Segoe MDL2 Assets" size="12.0" />
                     </font>

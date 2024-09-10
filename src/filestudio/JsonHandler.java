@@ -40,7 +40,7 @@ public class JsonHandler {
         FileWriter fileWriter = null;
         try {
             File file = getJsonFile();
-            fileWriter = new FileWriter(file);
+            fileWriter = new FileWriter(file, true);
             fileWriter.write(jsonArray.toString());
 
             //fileWriter.flush();

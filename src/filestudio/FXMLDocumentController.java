@@ -205,8 +205,9 @@ public class FXMLDocumentController implements Initializable {
         MenuItem shareMenu = new MenuItem("Share");
         MenuItem helpMenu = new MenuItem("Help");
         MenuItem updateMenu = new MenuItem("Update");
+        MenuItem feedBackMnu = new MenuItem("Feedback");
         MenuItem aboutMnu = new MenuItem("About");
-        ctxMnu.getItems().addAll(shareMenu, helpMenu, updateMenu, aboutMnu);
+        ctxMnu.getItems().addAll(shareMenu, helpMenu, updateMenu, feedBackMnu, aboutMnu);
         mainMenuBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             ctxMnu.show(mainMenuBtn, event.getScreenX(), event.getScreenY());
         });
@@ -215,13 +216,32 @@ public class FXMLDocumentController implements Initializable {
                 System.out.println(mi.getText());
                 switch (mi.getText()) {
                     case "Share":
+                        String smailto = "mailto:?subject=" + encodeUrl("Check Out This App!") + "&body=" + encodeUrl("I use FileStudio" + sfUrl);
+                        try {
+                            Desktop dt = Desktop.getDesktop();
+                            dt.mail(new URI(smailto));
+                        } catch (Exception e) {
+                            showNotification("MAIL-SHARE", "FAILED");
+                        }
                         break;
                     case "Help":
+                        openBrowser(sfUrl);
                         break;
                     case "Update":
                         updateFunc();
                         break;
                     case "About":
+                        openBrowser(sfUrl);
+                        break;
+                    case "Feedback":
+                        String mail = "abummoja3@gmail.com";
+                        String mailto = String.format("mailto:%s?subject=" + encodeUrl("FILE-STUDIO-V1.3 DESKTOP") + "&body=" + encodeUrl("I use FileStudio"), mail);
+                        try {
+                            Desktop dt = Desktop.getDesktop();
+                            dt.mail(new URI(mailto));
+                        } catch (Exception e) {
+                            showNotification("MAIL", "FAILED");
+                        }
                         break;
                 }
             });
@@ -266,6 +286,14 @@ public class FXMLDocumentController implements Initializable {
             });
         });
 
+    }
+
+    private String encodeUrl(String text) {
+        try {
+            return java.net.URLEncoder.encode(text, "UTF-8");
+        } catch (Exception e) {
+            return text;
+        }
     }
 
     @FXML
