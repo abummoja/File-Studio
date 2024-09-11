@@ -375,7 +375,6 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     void launchSettings() {
-        //if (!uss.isSettingsPageOpen) {
         Stage stage = new Stage();
         try {
             Parent root = FXMLLoader.load(getClass().getResource("SettingsUI.fxml"));
@@ -384,25 +383,11 @@ public class FXMLDocumentController implements Initializable {
             stage.initStyle(StageStyle.UNDECORATED);
             Image i = new Image(getClass().getResourceAsStream("FileStudioOtherIcon.png"));
             stage.getIcons().add(i);
-            //stage.setOnCloseRequest((evt) -> {
-            //updateSettingsAccess();
-            //});
-            //stage.setAlwaysOnTop(true);
-            //stage.show();
             stage.show();
             SettingsUIController.setStage(stage);
-            //updateSettingsAccess();
-            //uss.isSettingsPageOpen = true;
-            //TO-DO: Hide Settings Button to prevent user from launching two instances of setings since it will cause a bug.
-            //also create public static func to allow settings page to send commend to re enable button on clode
-            //stage.setOnCloseRequest((evt) -> {
-            //Enable settings btn.
-            //System.out.println("Closing settings");
-            //});
         } catch (IOException e) {
             System.out.println("Fxml settings err Abu, " + e.getMessage() + e.getCause().toString());
         }
-        //}
     }
 
     public void updateSettingsAccess() {
@@ -777,32 +762,29 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void compressorStart() throws IOException {
-        showNotification("FileStudio:Archiver", "Compressing...");
-        //notify(compressorNotif, "Compressing...");
         ArchiveExtractor aext = new ArchiveExtractor();
         String theDir = compressorPath.getText();
         File theDirObj = new File(theDir);
         theDir = theDirObj.getAbsolutePath();
         String outputDir = compressorDest.getText() + "\\" + theDirObj.getName() + ext;
         String multiFormFirstFile = compressorDest.getText() + "\\" + theDirObj.getName() + ".tar";
-        System.out.println("TheDir: " + theDir);
-        System.out.println("Compressing to: " + outputDir);
+//        System.out.println("TheDir: " + theDir);
+//        System.out.println("Compressing to: " + outputDir);
         //notify(compressorNotif, "Almost There...");
         if (new File(compressorPath.getText()).exists()) {
             switch (ext) {
                 case ".zip":
+                    aext.archive(theDir, outputDir);
+                    break;
                 case ".7z":
+                    aext.archive(theDir, outputDir);
+                    break;
                 case ".gz":
+                    aext.archive(theDir, outputDir);
+                    break;
                 case ".rar":
-//                    ArchiveExtractor bext = new ArchiveExtractor();
-//                    String path = compressorPath.getText();
-//                    File tDir = new File(path);
-//                    String outputPath = tDir.getParent() + "\\" + tDir.getName() + ".zip";
-//                    System.out.println(outputPath);
-//                    File outputZip = new File(outputPath);
-//                    ZipArchiveOutputStream zipOut = new ZipArchiveOutputStream(outputZip);
-//                    bext.createZip(zipOut, path);
-//                    zipOut.close();
+                    aext.archive(theDir, outputDir);
+                    break;
                 case ".tar":
                     aext.archive(theDir, outputDir);
                     break;
@@ -818,6 +800,7 @@ public class FXMLDocumentController implements Initializable {
                     Files.delete(Paths.get(multiFormFirstFile));
                     break;
                 //TODO: the ".tar.---" should be fed a tar file in place of "theDir" since they take tar and archive to second format
+                //Already fixed the above TODO by archiving(firstFile) then archiving the archived first file.
                 case ".tar.gz":
                     aext.archive(theDir, multiFormFirstFile);
                     aext.createTarGZipFile(multiFormFirstFile, outputDir);

@@ -247,10 +247,10 @@ public class ArchiveExtractor {
         try {
             new Archiver().create(format, pDestDir, pDir);
         } catch (IOException ex) {
-            System.out.println("ABU-ARCH(ioe): " + ex.getMessage());
+            //System.out.println("ABU-ARCH(ioe): " + ex.getMessage());
             //Logger.getLogger(ArchiveExtractor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ArchiveException ex) {
-            System.out.println("ABU-ARCH(arch-e): " + ex.getMessage());
+            //System.out.println("ABU-ARCH(arch-e): " + ex.getMessage());
             //Logger.getLogger(ArchiveExtractor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
