@@ -30,6 +30,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -113,11 +114,11 @@ public class ArchiverController implements Initializable {
     public void newExtractor() {
         ArchiveExtractor aex = new ArchiveExtractor();
         File zipFile = new File(extractorCurrentFileLabel.getText());
-        File targetDir = new File(zipFile.getParent());
+        File targetDir = new File(destination);
         log("extracting: " + zipFile.getPath());
         log("to: " + targetDir.getPath());
-        //cannot extract multiform archive ".tar.xxx"
-        //TODO: determine if is multiformat then extract approprietely else just unarchive()
+        //[FIXED] cannot extract multiform archive ".tar.xxx"
+        //[DONE]TODO: determine if is multiformat then extract approprietely else just unarchive()
         aex.unarchive(zipFile.getPath(), targetDir.getPath());
         log("Done!");
     }
@@ -257,5 +258,14 @@ public class ArchiverController implements Initializable {
 
     void log(String log) {
         extractorLogOutput.setText(extractorLogOutput.getText() + "\n" + log);
+    }
+
+    public void minimize() {
+        try {
+            Stage st = (Stage) extractorCurrentFileLabel.getScene().getWindow();
+            st.close();
+        } catch (Exception e) {
+            return;
+        }
     }
 }

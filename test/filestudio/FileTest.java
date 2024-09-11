@@ -39,6 +39,28 @@ public class FileTest {
     }
 
     @Test
+    void historyTest() {
+        FLogger fg = new FLogger(new File(Util.home + "\\test-hist.txt"));
+        JsonHandler jh = new JsonHandler();
+        List<String> fn = new ArrayList<>();
+        fn.add("test1fgf");
+        fn.add("anothertest");
+        fn.add("last str");
+        jh.writeToJson(fn);
+        List<String> hist = jh.readFromJson();
+        if (hist.isEmpty()) {
+            //histList.getItems().add("empty list");
+            //throw (new (Exception));
+            return;
+        }
+        for (String s : hist) {
+            System.out.println(s);
+            fg.Log(s);
+            //histList.getItems().add(s);
+        }
+    }
+
+    @Test
     void canWriteJson() {
         List<String> nm = new ArrayList<>();
         nm.add("good-first");

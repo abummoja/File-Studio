@@ -71,6 +71,10 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.imgscalr.Scalr;
+import java.util.Scanner;
+import java.net.HttpURLConnection;
+import java.util.Map;
+import net.minidev.json.JSONObject;
 
 /**
  * This is the entry point/main class
@@ -78,8 +82,9 @@ import org.imgscalr.Scalr;
  * @author Abraham Moruri : abummoja3@gmail.com||custombeats365@gmail.com
  */
 public class FXMLDocumentController implements Initializable {
-    //@FXML Button closeButton;
 
+    //@FXML Button closeButton;
+    private static String ver = "1.1.5-beta5";
     @FXML
     Label userTitle;
     @FXML
@@ -178,12 +183,13 @@ public class FXMLDocumentController implements Initializable {
     static String docex = "regex:.*(?i:pdf|doc|txt|pptx|xls|mhtml|html|ppt|mdb|accdb|docx)";
     static String archex = "regex:.*(?i:zip|rar|7z|aar|jar|gz|tar|xz|iso)";
     static String appex = "regex:.*(?i:exe|com|apk|bat|msi|iso|app|sh)";
-    private String[] menuOptions = {"Share", "Update", "Help", "About"};
+    //private String[] menuOptions = {"Share", "Update", "Help", "About"};
+    private static final String REPO_API_URL = "https://api.github.com/repos/abummoja/filestudio/releases/latest";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        //checkHistory();
+        checkHistory();
 
         userTitle.setText(Util.user + " | " + Util.os);
         File[] rootDrive = File.listRoots();
@@ -204,7 +210,7 @@ public class FXMLDocumentController implements Initializable {
         //MenuItem[] miArr = {};
         MenuItem shareMenu = new MenuItem("Share");
         MenuItem helpMenu = new MenuItem("Help");
-        MenuItem updateMenu = new MenuItem("Update");
+        MenuItem updateMenu = new MenuItem("Check For Updates");
         MenuItem feedBackMnu = new MenuItem("Feedback");
         MenuItem aboutMnu = new MenuItem("About");
         ctxMnu.getItems().addAll(shareMenu, helpMenu, updateMenu, feedBackMnu, aboutMnu);
@@ -227,8 +233,9 @@ public class FXMLDocumentController implements Initializable {
                     case "Help":
                         openBrowser(sfUrl);
                         break;
-                    case "Update":
-                        updateFunc();
+                    case "Check For Updates":
+                        //pdateFunc();
+                        checkForUpdates();
                         break;
                     case "About":
                         openBrowser(sfUrl);
@@ -301,6 +308,41 @@ public class FXMLDocumentController implements Initializable {
         openBrowser(sfUrl);
     }
 
+    void checkForUpdates() {
+        try {
+            // Get the latest release from GitHub
+            String latestVersion = ""/*getLatestReleaseTag()*/;
+
+            if (!ver.equals(latestVersion)) {
+                System.out.println("New version available: " + latestVersion);
+
+                // Download the filestudio.exe
+                //downloadFileFromRelease(latestVersion, "filestudio.exe");
+            } else {
+                System.out.println("You are using the latest version: " + ver);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+//    private static String getLatestReleaseTag() throws IOException {
+//        URL url = new URL(REPO_API_URL);
+//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//        connection.setRequestMethod("GET");
+//        connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
+//
+//        Scanner scanner = new Scanner(connection.getInputStream());
+//        StringBuilder response = new StringBuilder();
+//
+//        while (scanner.hasNext()) {
+//            response.append(scanner.nextLine());
+//        }
+//        scanner.close();
+//
+//        JSONObject jsonResponse = new JSONObject(new Map<>(response.toString()));
+//        return jsonResponse.getAsString("tag_name");
+//    }
     @FXML
     void donateFunc() {
         //launch browser with paypal link to donation page.
@@ -452,12 +494,17 @@ public class FXMLDocumentController implements Initializable {
         JsonHandler jh = new JsonHandler();
         List<String> sel = new ArrayList<>();
         sel.add(activeDir);
+        for (String sd : jh.readFromJson()) {
+            sel.add(sd);
+        }
+        jh.deleteData();
         jh.writeToJson(sel);
         checkHistory();
     }
 
     //[UNFINISHED&BUGGY] Method to get 'recent directories' list on Welcome Screen
     public void checkHistory() {
+        histList.getItems().clear();
         try {
             //load json data into listview.
             /**
@@ -469,11 +516,13 @@ public class FXMLDocumentController implements Initializable {
             JsonHandler jh = new JsonHandler();
             List<String> hist = jh.readFromJson();
             if (hist.isEmpty()) {
-                histList.getItems().add("empty list");
+                histList.getItems().clear();
+                histList.getItems().add("Empty List");
                 return;
-            }
-            for (String s : hist) {
-                histList.getItems().add(s);
+            } else {
+                for (String s : hist) {
+                    histList.getItems().add(s);
+                }
             }
         } catch (Exception ex) {
             histList.getItems().add("error while loading");

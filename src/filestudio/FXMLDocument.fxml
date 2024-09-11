@@ -154,11 +154,11 @@
                                                 </AnchorPane>
                                             </content>
                                         </Tab>
-                                        <Tab text="Add Files To Archive">
+                                        <!--                                        <Tab text="Add Files To Archive">
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                             </content>
-                                        </Tab>
+                                        </Tab>-->
                                     </tabs>
                                 </TabPane>
                             </children>
@@ -201,7 +201,7 @@
                                         <Image url="@FileStudioWarning.png" />
                                     </image>
                                 </ImageView>
-                                <Label layoutX="287.0" layoutY="275.0" text="This Feature Is Under Construction." />
+                                <Label layoutX="287.0" layoutY="275.0" text="Feature is in development. Will be available soon." />
                             </children>
                         </AnchorPane>
                     </content>
