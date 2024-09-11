@@ -4,17 +4,13 @@
  */
 package filestudio;
 
-//import filetool.FileTool;
 import com.google.gson.Gson;
-import java.awt.AWTException;
+import com.google.gson.JsonObject;
 import java.awt.Desktop;
-import java.awt.SystemTray;
 import java.awt.Toolkit;
-import java.awt.TrayIcon;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
-//import filetool.FileMultiplier;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,7 +30,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-//import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -57,8 +52,6 @@ import java.util.zip.ZipInputStream;
 import javafx.beans.Observable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -68,12 +61,10 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.MouseEvent;
 import javax.imageio.ImageIO;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.imgscalr.Scalr;
 import java.util.Scanner;
 import java.net.HttpURLConnection;
-import java.util.Map;
 import net.minidev.json.JSONObject;
 
 /**
@@ -188,9 +179,12 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        try {
+            checkForUpdates();
+        } catch (Exception e) {
+            //ignore error.
+        }
         checkHistory();
-
         userTitle.setText(Util.user + " | " + Util.os);
         File[] rootDrive = File.listRoots();
         for (File diskDrive : rootDrive) {
@@ -311,38 +305,58 @@ public class FXMLDocumentController implements Initializable {
     void checkForUpdates() {
         try {
             // Get the latest release from GitHub
-            String latestVersion = ""/*getLatestReleaseTag()*/;
+            String latestVersion = getLatestReleaseTag();
 
             if (!ver.equals(latestVersion)) {
                 System.out.println("New version available: " + latestVersion);
-
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Update " + latestVersion);
+                alert.setHeaderText("A new version of FileStudio is available!");
+                alert.setContentText("Bug Fixes, Improvements, New Features and more...");
+                ButtonType yesBtn = new ButtonType("Update");
+                ButtonType noBtn = new ButtonType("Close");
+                alert.getButtonTypes().setAll(yesBtn, noBtn);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent()) {
+                    if (result.get() == yesBtn) {
+                        updateFunc();
+                    } else if (result.get() == noBtn) {
+                        //clode dlg
+                        alert.close();
+                    } else {
+                        //return;
+                        alert.close();
+                    }
+                }
                 // Download the filestudio.exe
                 //downloadFileFromRelease(latestVersion, "filestudio.exe");
             } else {
                 System.out.println("You are using the latest version: " + ver);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("FAILED TO CHECK FOR UPDATES!");
+            //e.printStackTrace();
         }
     }
 
-//    private static String getLatestReleaseTag() throws IOException {
-//        URL url = new URL(REPO_API_URL);
-//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//        connection.setRequestMethod("GET");
-//        connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
-//
-//        Scanner scanner = new Scanner(connection.getInputStream());
-//        StringBuilder response = new StringBuilder();
-//
-//        while (scanner.hasNext()) {
-//            response.append(scanner.nextLine());
-//        }
-//        scanner.close();
-//
-//        JSONObject jsonResponse = new JSONObject(new Map<>(response.toString()));
-//        return jsonResponse.getAsString("tag_name");
-//    }
+    private static String getLatestReleaseTag() throws IOException {
+        URL url = new URL(REPO_API_URL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
+
+        Scanner scanner = new Scanner(connection.getInputStream());
+        StringBuilder response = new StringBuilder();
+
+        while (scanner.hasNext()) {
+            response.append(scanner.nextLine());
+        }
+        scanner.close();
+        JsonObject jsonResponse = new JsonObject();
+        jsonResponse.getAsJsonObject(response.toString());
+        return jsonResponse.get("tag_name").toString();
+    }
+
     @FXML
     void donateFunc() {
         //launch browser with paypal link to donation page.
@@ -739,17 +753,25 @@ public class FXMLDocumentController implements Initializable {
 
     public void extractFile() {
         //NOTE: this method only calls the extractor class but does not actually extract files.
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("layout_archiver.fxml"));
-        try {
-            Parent root = loader.load();
-            ArchiverController archController = loader.getController();
-            archController.setCurrentPathAndDest(extractorFilePath.getText(), extractorDestinationLabel.getText());
-            Stage extractorStage = new Stage();
-            extractorStage.setScene(new Scene(root));
-            extractorStage.initStyle(StageStyle.UNDECORATED);
-            extractorStage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        if (extractorFilePath.getText() != null && extractorDestinationLabel.getText() != null) {
+            if (new File(extractorFilePath.getText()).exists()) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("layout_archiver.fxml"));
+                try {
+                    Parent root = loader.load();
+                    ArchiverController archController = loader.getController();
+                    archController.setCurrentPathAndDest(extractorFilePath.getText(), extractorDestinationLabel.getText());
+                    Stage extractorStage = new Stage();
+                    extractorStage.setScene(new Scene(root));
+                    extractorStage.initStyle(StageStyle.UNDECORATED);
+                    extractorStage.show();
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                alert("Error", "Failed To Extract Files", "The File Does Not Exist!", Alert.AlertType.ERROR);
+            }
+        } else {
+            alert("Error", "Failed To Extract Files", "Enter the correct file path to extract", Alert.AlertType.ERROR);
         }
     }
 
@@ -871,6 +893,8 @@ public class FXMLDocumentController implements Initializable {
                     Files.delete(Paths.get(multiFormFirstFile));
             }
             //notify(compressorNotif, "Done!");
+        } else {
+            alert("Compression Error", "Could not compress content", "The file or folder you are trying to compress does not exist!", Alert.AlertType.ERROR);
         }
     }
 
@@ -938,5 +962,24 @@ public class FXMLDocumentController implements Initializable {
 
     private void notify(TextField tf, String msg) {
         tf.setText(msg);
+    }
+
+    private void alert(String title, String header, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        ButtonType yesBtn = new ButtonType("Ok");
+        //ButtonType noBtn = new ButtonType("Close");
+        alert.getButtonTypes().setAll(yesBtn);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == yesBtn) {
+                alert.close();
+            } else {
+                //return;
+                alert.close();
+            }
+        }
     }
 }
