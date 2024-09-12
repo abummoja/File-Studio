@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,6 +169,7 @@ public class FXMLDocumentController implements Initializable {
     Organizer iOrganizer = new Organizer();
     UserSettings uss = new UserSettings();
     String uimgpath;
+    FLogger logger = new FLogger();
     static String audex = "regex:.*(?i:mp3|ogg|avi|wav|flacc|aud|m4a|m3u)";
     static String videx = "regex:.*(?i:mp4|mkv|webm|ts|wmp|mov)";
     static String picex = "regex:.*(?i:jpg|jpeg|png|gif|bmp|jpe|jfif|ico)";
@@ -213,7 +215,7 @@ public class FXMLDocumentController implements Initializable {
         });
         for (MenuItem mi : ctxMnu.getItems()) {
             mi.addEventHandler(EventType.ROOT, eventHandler -> {
-                System.out.println(mi.getText());
+                logger.Log(mi.getText());
                 switch (mi.getText()) {
                     case "Share":
                         String smailto = "mailto:?subject=" + encodeUrl("Check Out This App!") + "&body=" + encodeUrl("I use FileStudio" + sfUrl);
@@ -229,7 +231,11 @@ public class FXMLDocumentController implements Initializable {
                         break;
                     case "Check For Updates":
                         //pdateFunc();
-                        checkForUpdates();
+                        try {
+                            checkForUpdates();
+                        } catch (Exception e) {
+                            alert("Network Error", "Failed to check for updates!", "Connect your computer to the internet", Alert.AlertType.ERROR);
+                        }
                         break;
                     case "About":
                         openBrowser(sfUrl);
@@ -250,12 +256,12 @@ public class FXMLDocumentController implements Initializable {
         compressorType.getSelectionModel().selectedItemProperty().addListener((Observable ov) -> {
             int selectedIndex = compressorType.getSelectionModel().getSelectedIndex();
             ext = types[selectedIndex];
-            System.out.println(ext);
+            logger.Log(ext);
             //String ext = (String)compressorType.getItems()[compressorType.getSelectionModel().getSelectedIndex()]
         });
         diskList.getSelectionModel().selectedItemProperty().addListener(ov -> {
             DiskInfo di = disksListObservable.get(diskList.getSelectionModel().getSelectedIndex());
-            System.out.println(di.path);
+            logger.Log(di.path);
             int space = (int) di.disk.getTotalSpace();
             int used = (int) di.getUsableSpace() - space;
             dirProperties.setText(di.path + "\nName: " + di.getName() + "\nTotal Space: " + Math.round((di.getTotalSpace() / 1024 / 1024) * 100) / 100 + " GB\nFree Space: " + Math.round((di.getFreeSpace() / 1024 / 1024) * 100) / 100 + " GB");
@@ -292,7 +298,8 @@ public class FXMLDocumentController implements Initializable {
     private String encodeUrl(String text) {
         try {
             return java.net.URLEncoder.encode(text, "UTF-8");
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException e) {
+            logger.Log("URL ENCODER: " + e.getMessage());
             return text;
         }
     }
@@ -306,9 +313,9 @@ public class FXMLDocumentController implements Initializable {
         try {
             // Get the latest release from GitHub
             String latestVersion = getLatestReleaseTag();
-
+            logger.Log("Checking for updates on : " + ver);
             if (!ver.equals(latestVersion)) {
-                System.out.println("New version available: " + latestVersion);
+                logger.Log("New version available: " + latestVersion);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Update " + latestVersion);
                 alert.setHeaderText("A new version of FileStudio is available!");
@@ -331,10 +338,10 @@ public class FXMLDocumentController implements Initializable {
                 // Download the filestudio.exe
                 //downloadFileFromRelease(latestVersion, "filestudio.exe");
             } else {
-                System.out.println("You are using the latest version: " + ver);
+                logger.Log("You are using the latest version: " + ver);
             }
         } catch (IOException e) {
-            System.out.println("FAILED TO CHECK FOR UPDATES!");
+            logger.Log("FAILED TO CHECK FOR UPDATES!");
             //e.printStackTrace();
         }
     }
@@ -410,7 +417,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     void showNotification(String title, String msg) {
-        System.out.println(title + msg);
+        logger.Log(title + msg);
 //        if (SystemTray.isSupported()) {
 //            SystemTray sysTray = SystemTray.getSystemTray();
 //            java.awt.Image img = Toolkit.getDefaultToolkit().createImage(getClass().getResourceAsStream("FileStudioOtherIcon.png").toString());
@@ -442,7 +449,7 @@ public class FXMLDocumentController implements Initializable {
             stage.show();
             SettingsUIController.setStage(stage);
         } catch (IOException e) {
-            System.out.println("Fxml settings err Abu, " + e.getMessage() + e.getCause().toString());
+            logger.Log("Fxml settings err Abu, " + e.getMessage() + e.getCause().toString());
         }
     }
 
@@ -617,7 +624,7 @@ public class FXMLDocumentController implements Initializable {
             undoBtn.setDisable(false);
             redoBtn.setDisable(true);
         } catch (IOException ex) {
-            System.out.println("Err Abu, " + ex.getMessage());
+            logger.Log("Err Abu, " + ex.getMessage());
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -669,6 +676,7 @@ public class FXMLDocumentController implements Initializable {
             Organizer.clearList();
             showNotification("FileStudio:Organizer", "Finished processing dir.");
         } catch (IOException ex) {
+            logger.Log("ProcessDir : " + ex.getMessage());
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -691,7 +699,7 @@ public class FXMLDocumentController implements Initializable {
             //orgCmplete.setText("Success!");
             showNotification("FileStudio:Organizer", "Organized!");
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            logger.Log("OrganizeDir: " + ex.getMessage());
             //orgCmplete.setText(ex.getMessage());
             //Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -706,7 +714,7 @@ public class FXMLDocumentController implements Initializable {
         byte[] content = new byte[(int) entry.getSize()];
         for (int i = 0; i < entry.getSize(); i++) {
             zipInput.read(content, i, content.length - i);
-            System.out.println("Read file...");
+            logger.Log("Read file...");
         }
     }
 
@@ -765,13 +773,16 @@ public class FXMLDocumentController implements Initializable {
                     extractorStage.initStyle(StageStyle.UNDECORATED);
                     extractorStage.show();
                 } catch (IOException ex) {
+                    logger.Log("extractFile " + ex.getMessage());
                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 alert("Error", "Failed To Extract Files", "The File Does Not Exist!", Alert.AlertType.ERROR);
+                logger.Log("Error", "Failed To Extract Files", "The File Does Not Exist!");
             }
         } else {
             alert("Error", "Failed To Extract Files", "Enter the correct file path to extract", Alert.AlertType.ERROR);
+            logger.Log("Error", "Failed To Extract Files", "Enter the correct file path to extract");
         }
     }
 
@@ -791,9 +802,9 @@ public class FXMLDocumentController implements Initializable {
                 int width = bi.getWidth();
                 int height = bi.getHeight();
                 currentImageSizeTF.setText(width + "x" + height);
-                //[Fri,Mar-8-2024]Last run failed with --> Can't open image: java.lang.IllegalArgumentException: Invalid URL: unknown protocol: c
+                //[FIXED][Fri,Mar-8-2024]Last run failed with --> Can't open image: java.lang.IllegalArgumentException: Invalid URL: unknown protocol: c
             } catch (Exception e) {
-                System.out.println("Can't open image: " + e);
+                logger.Log("Can't open image: " + e);
             }
         }
     }
@@ -895,6 +906,7 @@ public class FXMLDocumentController implements Initializable {
             //notify(compressorNotif, "Done!");
         } else {
             alert("Compression Error", "Could not compress content", "The file or folder you are trying to compress does not exist!", Alert.AlertType.ERROR);
+            logger.Log("Compression Error", "Could not compress content", "The file or folder you are trying to compress does not exist!");
         }
     }
 
@@ -954,7 +966,7 @@ public class FXMLDocumentController implements Initializable {
             //System.out.println("Image upscaled successfully!");
         } catch (IOException e) {
             //notify(imgUpNotif, "Failed to upscale");
-            System.out.println("ABU-UPSCALER: " + e.getMessage());
+            logger.Log("ABU-UPSCALER: " + e.getMessage());
             e.printStackTrace();
         }
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

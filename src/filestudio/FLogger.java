@@ -26,7 +26,7 @@ public class FLogger {
         this.logFile = logFilem;
     }
 
-    public void Log(String data) {
+    public void Log(String... data) {
         //Context.getContext().getClass()
         FileWriter fw = null;
         try {
