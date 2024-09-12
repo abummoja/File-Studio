@@ -31,7 +31,9 @@ public class FLogger {
         FileWriter fw = null;
         try {
             fw = new FileWriter(logFile, true);
-            fw.write(data + "\n");
+            for (String s : data) {
+                fw.write(s + "\n\t");
+            }
         } catch (Exception e) {
             return;
         } finally {

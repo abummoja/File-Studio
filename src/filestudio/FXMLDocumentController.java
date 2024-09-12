@@ -181,11 +181,11 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            checkForUpdates();
-        } catch (Exception e) {
-            //ignore error.
-        }
+//        try {
+//            checkForUpdates();
+//        } catch (Exception e) {
+//            //ignore error.
+//        }
         checkHistory();
         userTitle.setText(Util.user + " | " + Util.os);
         File[] rootDrive = File.listRoots();
@@ -234,7 +234,8 @@ public class FXMLDocumentController implements Initializable {
                         try {
                             checkForUpdates();
                         } catch (Exception e) {
-                            alert("Network Error", "Failed to check for updates!", "Connect your computer to the internet", Alert.AlertType.ERROR);
+                            logger.Log("Network Error", "Failed to check for updates!", "Connect your computer to the internet");
+                            //alert("Network Error", "Failed to check for updates!", "Connect your computer to the internet", Alert.AlertType.ERROR);
                         }
                         break;
                     case "About":
@@ -343,6 +344,7 @@ public class FXMLDocumentController implements Initializable {
         } catch (IOException e) {
             logger.Log("FAILED TO CHECK FOR UPDATES!");
             //e.printStackTrace();
+            alert("Network Error", "Failed to check for updates!", "Connect your computer to the internet", Alert.AlertType.ERROR);
         }
     }
 
