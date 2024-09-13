@@ -76,7 +76,7 @@ import net.minidev.json.JSONObject;
 public class FXMLDocumentController implements Initializable {
 
     //@FXML Button closeButton;
-    private static String ver = "1.1.5-beta5";
+    private final static String ver = "1.1.5-beta5";
     @FXML
     Label userTitle;
     @FXML
@@ -113,18 +113,18 @@ public class FXMLDocumentController implements Initializable {
     TextField organizerDirTextField;
     @FXML
     Label organizerPreviewText;
-    @FXML
-    Button extractorSelectFileBtn;
-    @FXML
-    Button extractorDestinationBtn;
-    @FXML
-    Button extractBtn;
+//    @FXML
+//    Button extractorSelectFileBtn;
+//    @FXML
+//    Button extractorDestinationBtn;
+//    @FXML
+//    Button extractBtn;
     @FXML
     TextField extractorFilePath;
     @FXML
     TextField extractorDestinationLabel;
-    @FXML
-    Button imageUpscaleBtn;
+//    @FXML
+//    Button imageUpscaleBtn;
     @FXML
     TextField imageUpscaleTextField;
     @FXML
@@ -139,12 +139,12 @@ public class FXMLDocumentController implements Initializable {
     TextField compressorDest;
     @FXML
     ComboBox compressorType;
-    @FXML
-    TextField imgUpNotif;
-    @FXML
-    TextField compressorNotif;
-    @FXML
-    Button upscaledPreviewBtn;
+//    @FXML
+//    TextField imgUpNotif;
+//    @FXML
+//    TextField compressorNotif;
+//    @FXML
+//    Button upscaledPreviewBtn;
     @FXML
     TextField currentImageSizeTF;
     @FXML
@@ -159,8 +159,8 @@ public class FXMLDocumentController implements Initializable {
     //@FXML ListView<DiskInfo> diskList;
     ObservableList<DiskInfo> disksListObservable = FXCollections.observableArrayList();
     ObservableList<String> diskStringList = FXCollections.observableArrayList();
-    File history;
-    String mdata = "";
+    //File history;
+    //String mdata = "";
     String activeDir = "";
     String ext = ".zip";
     List<File> wordRemoverFileList = new ArrayList<>();
@@ -186,7 +186,7 @@ public class FXMLDocumentController implements Initializable {
 //        } catch (Exception e) {
 //            //ignore error.
 //        }
-        checkHistory();
+        //checkHistory();
         userTitle.setText(Util.user + " | " + Util.os);
         File[] rootDrive = File.listRoots();
         for (File diskDrive : rootDrive) {

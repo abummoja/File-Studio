@@ -32,7 +32,7 @@ public class FLogger {
         try {
             fw = new FileWriter(logFile, true);
             for (String s : data) {
-                fw.write(s + "\n\t");
+                fw.write(s + "\n");
             }
         } catch (Exception e) {
             return;
