@@ -75,8 +75,7 @@ import net.minidev.json.JSONObject;
  */
 public class FXMLDocumentController implements Initializable {
 
-    //@FXML Button closeButton;
-    private final static String ver = "1.1.5-beta5";
+    private final static String ver = "1.2.0-beta6";
     @FXML
     Label userTitle;
     @FXML
@@ -93,8 +92,6 @@ public class FXMLDocumentController implements Initializable {
     ListView<String> histList;
     @FXML
     ListView<String> wordRemoverList;
-    //@FXML
-    //Pane mainWindowHandleMini;
     @FXML
     AnchorPane mainWindowHandle;
     @FXML
@@ -113,18 +110,10 @@ public class FXMLDocumentController implements Initializable {
     TextField organizerDirTextField;
     @FXML
     Label organizerPreviewText;
-//    @FXML
-//    Button extractorSelectFileBtn;
-//    @FXML
-//    Button extractorDestinationBtn;
-//    @FXML
-//    Button extractBtn;
     @FXML
     TextField extractorFilePath;
     @FXML
     TextField extractorDestinationLabel;
-//    @FXML
-//    Button imageUpscaleBtn;
     @FXML
     TextField imageUpscaleTextField;
     @FXML
@@ -139,12 +128,6 @@ public class FXMLDocumentController implements Initializable {
     TextField compressorDest;
     @FXML
     ComboBox compressorType;
-//    @FXML
-//    TextField imgUpNotif;
-//    @FXML
-//    TextField compressorNotif;
-//    @FXML
-//    Button upscaledPreviewBtn;
     @FXML
     TextField currentImageSizeTF;
     @FXML
@@ -159,8 +142,6 @@ public class FXMLDocumentController implements Initializable {
     //@FXML ListView<DiskInfo> diskList;
     ObservableList<DiskInfo> disksListObservable = FXCollections.observableArrayList();
     ObservableList<String> diskStringList = FXCollections.observableArrayList();
-    //File history;
-    //String mdata = "";
     String activeDir = "";
     String ext = ".zip";
     List<File> wordRemoverFileList = new ArrayList<>();
@@ -177,7 +158,7 @@ public class FXMLDocumentController implements Initializable {
     static String archex = "regex:.*(?i:zip|rar|7z|aar|jar|gz|tar|xz|iso)";
     static String appex = "regex:.*(?i:exe|com|apk|bat|msi|iso|app|sh)";
     //private String[] menuOptions = {"Share", "Update", "Help", "About"};
-    private static final String REPO_API_URL = "https://api.github.com/repos/abummoja/filestudio/releases/latest";
+    private static final String REPO_API_URL = "https://api.github.com/repos/abummoja/file-studio/releases/latest";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -307,6 +288,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     void updateFunc() {
+        //open browser to sourceforge url for download
         openBrowser(sfUrl);
     }
 
@@ -344,7 +326,7 @@ public class FXMLDocumentController implements Initializable {
         } catch (IOException e) {
             logger.Log("FAILED TO CHECK FOR UPDATES!");
             //e.printStackTrace();
-            alert("Network Error", "Failed to check for updates!", "Connect your computer to the internet", Alert.AlertType.ERROR);
+            alert("Network Error", "Failed to check for updates!", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 

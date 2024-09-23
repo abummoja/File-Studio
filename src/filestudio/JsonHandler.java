@@ -6,7 +6,11 @@ package filestudio;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,7 +44,7 @@ public class JsonHandler {
         FileWriter fileWriter = null;
         try {
             File file = getJsonFile();
-            fileWriter = new FileWriter(file, true);
+            fileWriter = new FileWriter(file);
             fileWriter.write(jsonArray.toString());
 
             //fileWriter.flush();
@@ -65,8 +69,15 @@ public class JsonHandler {
 
         if (file.exists()) {
             try {
-                String content = new String(Files.readAllBytes(file.toPath()));
+                //String content = new String(Files.readAllBytes(file.toPath()));
+                FileReader fr = new FileReader(file.getAbsolutePath());
                 JsonArray jsonArray = new JsonArray();
+                JsonElement jsonel = JsonParser.parseReader(fr);
+                if (jsonel.isJsonArray()) {
+                    jsonArray = jsonel.getAsJsonArray();
+                } else {
+                    jsonArray.add("je:empty file");
+                }
 
                 for (int i = 0; i < jsonArray.size(); i++) {
                     names.add(jsonArray.get(i).getAsString());
