@@ -35,6 +35,12 @@ public class FileStudio extends Application {
             Image i = new Image(getClass().getResourceAsStream("FileStudioMainIcon.png"));
             stage.getIcons().add(i);
             stage.initStyle(StageStyle.UNDECORATED);
+            stage.setResizable(false);
+            stage.maximizedProperty().addListener((obs, oldv, newv) -> {
+                if (newv) {
+                    stage.setMaximized(false);
+                }
+            });
             stage.show();
         } catch (IOException e) {
             System.out.println("Fxml err Abu, " + e.getMessage() + e.getCause().toString());

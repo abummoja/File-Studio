@@ -167,7 +167,7 @@ public class FXMLDocumentController implements Initializable {
 //        } catch (Exception e) {
 //            //ignore error.
 //        }
-        //checkHistory();
+        checkHistory();
         userTitle.setText(Util.user + " | " + Util.os);
         File[] rootDrive = File.listRoots();
         for (File diskDrive : rootDrive) {
