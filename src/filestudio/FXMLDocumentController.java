@@ -66,7 +66,10 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.imgscalr.Scalr;
 import java.util.Scanner;
 import java.net.HttpURLConnection;
+import java.util.Map;
+import java.util.HashMap;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TreeItem;
 import net.minidev.json.JSONObject;
 
 /**
@@ -135,6 +138,10 @@ public class FXMLDocumentController implements Initializable {
     TextField newImageResTF;
     @FXML
     Button mainMenuBtn;
+    @FXML
+    ListView dupeTree;
+    @FXML
+    TextField dupefinderInput;
     String[] types = {".zip", ".tar", ".gz", ".7z", ".rar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
     String archFolder = "";
     String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
@@ -493,6 +500,7 @@ public class FXMLDocumentController implements Initializable {
         activeDir = selectedFolder.getAbsolutePath();
         organizerDirTextField.setText(activeDir);
         compressorPath.setText(activeDir);
+        dupefinderInput.setText(activeDir);
         compressorDest.setText(selectedFolder.getParent());
         JsonHandler jh = new JsonHandler();
         List<String> sel = new ArrayList<>();
@@ -974,6 +982,30 @@ public class FXMLDocumentController implements Initializable {
                 //return;
                 alert.close();
             }
+        }
+    }
+
+    public void scan() {
+        File directory = new File(activeDir);
+        boolean hashType = true;
+        Map<String, List<String>> duplicateList = new HashMap<String, List<String>>();
+        try {
+            Finder.find(duplicateList, directory, hashType);									// FIND DUPLICATE FILES
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            //alert
+        }
+        for (List<String> list : duplicateList.values()) {
+            //after scan
+            //System.out.println();
+            TreeItem<String> parent = new TreeItem<>();
+            for (String name : list) {
+                //add name tolist
+                System.out.println(name);
+                TreeItem child = new TreeItem(name);
+                parent.getChildren().add(child);
+            }
+            dupeTree.getItems().add(parent);
         }
     }
 }

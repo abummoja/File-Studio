@@ -90,10 +90,11 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="dupefinderInput" layoutX="132.0" layoutY="25.0" prefWidth="494.0" promptText="Enter path to folder to be scanned." />
-                        <Button layoutX="633.0" layoutY="25.0" mnemonicParsing="false" onAction="#showFileChooser" text="Change" />
+                        <TextField fx:id="dupefinderInput" layoutX="132.0" layoutY="25.0" prefWidth="422.0" promptText="Enter path to folder to be scanned." />
+                        <Button layoutX="563.0" layoutY="25.0" mnemonicParsing="false" onAction="#showFileChooser" text="Change" />
                         <TreeView fx:id="dupeTree" layoutX="132.0" layoutY="66.0" prefHeight="387.0" prefWidth="561.0" />
-                        <Button layoutX="592.0" layoutY="469.0" mnemonicParsing="false" text="Delete Selected" />
+                        <Button fx:id="deleteDupesBtn" layoutX="592.0" layoutY="469.0" mnemonicParsing="false" text="Delete Selected" />
+                        <Button fx:id="scanDupeBtn" layoutX="631.0" layoutY="25.0" mnemonicParsing="false" onAction="#scan" prefWidth="61.0" text="Scan" />
                      </children>
                   </AnchorPane>
               </content>
