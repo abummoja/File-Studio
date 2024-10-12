@@ -68,9 +68,10 @@ import java.util.Scanner;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.HashMap;
-import javafx.scene.control.Alert.AlertType;
+//import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TreeItem;
-import net.minidev.json.JSONObject;
+import javafx.scene.control.TreeView;
+//import net.minidev.json.JSONObject;
 
 /**
  * This is the entry point/main class
@@ -139,7 +140,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     Button mainMenuBtn;
     @FXML
-    ListView dupeTree;
+    TreeView dupeTree;
     @FXML
     TextField dupefinderInput;
     String[] types = {".zip", ".tar", ".gz", ".7z", ".rar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
@@ -987,7 +988,7 @@ public class FXMLDocumentController implements Initializable {
 
     public void scan() {
         File directory = new File(activeDir);
-        boolean hashType = true;
+        boolean hashType = false;
         Map<String, List<String>> duplicateList = new HashMap<String, List<String>>();
         try {
             Finder.find(duplicateList, directory, hashType);									// FIND DUPLICATE FILES
@@ -995,6 +996,10 @@ public class FXMLDocumentController implements Initializable {
             exception.printStackTrace();
             //alert
         }
+        TreeItem rootitem = new TreeItem("Duplicates");
+        rootitem.setExpanded(true);
+        dupeTree.setRoot(rootitem);
+        dupeTree.setShowRoot(true);
         for (List<String> list : duplicateList.values()) {
             //after scan
             //System.out.println();
@@ -1005,7 +1010,7 @@ public class FXMLDocumentController implements Initializable {
                 TreeItem child = new TreeItem(name);
                 parent.getChildren().add(child);
             }
-            dupeTree.getItems().add(parent);
+            rootitem.getChildren().add(parent);
         }
     }
 }
