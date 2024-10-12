@@ -66,6 +66,7 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.imgscalr.Scalr;
 import java.util.Scanner;
 import java.net.HttpURLConnection;
+import javafx.scene.control.Alert.AlertType;
 import net.minidev.json.JSONObject;
 
 /**
@@ -162,11 +163,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        try {
-//            checkForUpdates();
-//        } catch (Exception e) {
-//            //ignore error.
-//        }
+        checkForUpdates();
         checkHistory();
         userTitle.setText(Util.user + " | " + Util.os);
         File[] rootDrive = File.listRoots();
@@ -322,6 +319,7 @@ public class FXMLDocumentController implements Initializable {
                 //downloadFileFromRelease(latestVersion, "filestudio.exe");
             } else {
                 logger.Log("You are using the latest version: " + ver);
+                alert("Updater", "Latest version is : " + latestVersion, "You are using the latest version.", Alert.AlertType.INFORMATION);
             }
         } catch (IOException e) {
             logger.Log("FAILED TO CHECK FOR UPDATES!");
