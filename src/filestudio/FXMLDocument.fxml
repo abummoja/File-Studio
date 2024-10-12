@@ -10,6 +10,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -85,6 +86,18 @@
                         </AnchorPane>
                     </content>
                 </Tab>
+            <Tab text="Duplicate Finder">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="dupefinderInput" layoutX="132.0" layoutY="25.0" prefWidth="494.0" promptText="Enter path to folder to be scanned." />
+                        <Button layoutX="633.0" layoutY="25.0" mnemonicParsing="false" onAction="#showFileChooser" text="Change" />
+                        <TreeView fx:id="dupeTree" layoutX="132.0" layoutY="66.0" prefHeight="387.0" prefWidth="561.0" />
+                        <Button layoutX="592.0" layoutY="469.0" mnemonicParsing="false" text="Delete Selected" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
                 <Tab text="Duplicator">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -98,6 +111,11 @@
                                 <Button fx:id="undoBtn" disable="true" layoutX="97.0" layoutY="421.0" mnemonicParsing="false" onMouseClicked="#undoDuplicator" text="Undo" />
                                 <Button fx:id="redoBtn" disable="true" layoutX="162.0" layoutY="421.0" mnemonicParsing="false" onMouseClicked="#redoDuplicator" text="Redo" />
                                 <Button fx:id="selectFileDuplicatorBtn" layoutX="625.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#selectFile" text="Select" />
+                        <Label layoutX="97.0" layoutY="466.0" prefHeight="17.0" prefWidth="579.0" text="This feature will be removed soon. Express interest through feedback." textFill="#ff7300">
+                           <font>
+                              <Font name="System Bold" size="17.0" />
+                           </font>
+                        </Label>
                             </children>
                         </AnchorPane>
                     </content>
