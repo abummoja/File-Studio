@@ -16,6 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -55,6 +56,8 @@ public class SettingsUIController implements Initializable {
     Button musicBtn;
     @FXML
     AnchorPane mainWindowHandle;
+    @FXML
+    Label aboutLabel;
 
     UserSettings uss = new UserSettings();
     boolean changesMade = false;
@@ -86,6 +89,13 @@ public class SettingsUIController implements Initializable {
         archivesPathField.setText(uss.archdir);
         picturesPathField.setText(uss.picdir);
         documentsPathField.setText(uss.docsdir);
+        aboutLabel.setText("This Version : " + FXMLDocumentController.ver
+                + "\n (c)2024 Abraham Moruri"
+                + "\n Project License : Apache 2.0"
+                + "\n Project repository : https://github.com/abummoja/File-Studio"
+                + "\n SourceForge (Download): https://sourceforge.net/projects/filestudio"
+                + "\n This is a free and open-source project and only profits from donations."
+                + "\n Consider donating through : " + FXMLDocumentController.pd);
     }
 
     @FXML

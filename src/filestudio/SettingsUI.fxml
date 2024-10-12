@@ -39,12 +39,12 @@
                                 <TextField fx:id="archivesPathField" layoutX="14.0" layoutY="147.0" prefWidth="328.0" promptText="Preferred Archives(zip etc...) Folder" />
                                 <TextField fx:id="appsPathField" layoutX="14.0" layoutY="183.0" prefWidth="328.0" promptText="Preferred Applications Folder" />
                                 <TextField fx:id="documentsPathField" layoutX="14.0" layoutY="220.0" prefWidth="328.0" promptText="Preferred Documents Folder" />
-                                <Button fx:id="musicBtn" layoutX="346.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change" />
-                                <Button fx:id="videosBtn" layoutX="346.0" layoutY="75.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change" />
-                                <Button fx:id="picturesBtn" layoutX="346.0" layoutY="111.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change" />
-                                <Button fx:id="archivesBtn" layoutX="346.0" layoutY="147.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change" />
-                                <Button fx:id="appsBtn" layoutX="346.0" layoutY="183.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change" />
-                                <Button fx:id="documentsBtn" layoutX="346.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change" />
+                                <Button fx:id="musicBtn" layoutX="346.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change Music Folder" />
+                                <Button fx:id="videosBtn" layoutX="346.0" layoutY="75.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change Videos Folder" />
+                                <Button fx:id="picturesBtn" layoutX="346.0" layoutY="111.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change Pictures Folder" />
+                                <Button fx:id="archivesBtn" layoutX="346.0" layoutY="147.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change Archives Folder" />
+                                <Button fx:id="appsBtn" layoutX="346.0" layoutY="183.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change Apps Folder" />
+                                <Button fx:id="documentsBtn" layoutX="346.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#handleClick" text="Change Documents Folder" />
                             </children>
                         </AnchorPane>
                     </content>
@@ -75,11 +75,7 @@
                               <Font size="40.0" />
                            </font>
                         </Label>
-                        <Label layoutX="186.0" layoutY="72.0" text="This Version: 1.1.0" />
-                        <Label layoutX="186.0" layoutY="97.0" text="This is an open sounce project." />
-                        <Label layoutX="186.0" layoutY="121.0" text="(c) 2024, Abraham Moruri" />
-                        <Label layoutX="186.0" layoutY="143.0" text="Contacts: instagram.com/codefather3" />
-                        <Label layoutX="186.0" layoutY="164.0" text="Project Page: github.com/abummoja/File-Studio" />
+                        <Label fx:id="aboutLabel" alignment="TOP_LEFT" layoutX="186.0" layoutY="81.0" prefHeight="189.0" prefWidth="410.0" text="version" />
                      </children>
                   </AnchorPane>
               </content>

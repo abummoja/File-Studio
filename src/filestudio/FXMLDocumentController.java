@@ -71,13 +71,13 @@ import org.imgscalr.Scalr;
 //import net.minidev.json.JSONObject;
 
 /**
- * This is the entry point/main class
+ * This is the GUI entry point/main class
  *
- * @author Abraham Moruri : abummoja3@gmail.com||custombeats365@gmail.com
+ * @author Abraham Moruri
  */
 public class FXMLDocumentController implements Initializable {
 
-    private final static String ver = "1.2.0-beta6";
+    public final static String ver = "1.2.0-beta6";
     @FXML
     Label userTitle;
     @FXML
@@ -142,7 +142,7 @@ public class FXMLDocumentController implements Initializable {
     TextField dupefinderInput;
     String[] types = {".zip", ".tar", ".gz", ".7z", ".rar", ".tar.sz", ".tar.gz", ".tar.deflate", ".tar.xz", ".tar.bz2"};
     String archFolder = "";
-    String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
+    public static String pd = "https://paypal.com/donate/?hosted_button_id=A88GCN8R382B6";
     String sfUrl = "https://sourceforge.net/projects/filestudio/";//source forge update url
     //@FXML Button autoGenerateWordToRemove;
     //@FXML ListView<DiskInfo> diskList;
@@ -317,7 +317,7 @@ public class FXMLDocumentController implements Initializable {
                         alert.close();
                     } else {
                         //return;
-                        alert.close();
+                        updateFunc();
                     }
                 }
                 // Download the filestudio.exe
@@ -1003,10 +1003,11 @@ public class FXMLDocumentController implements Initializable {
             TreeItem<String> parent = new TreeItem<>();
             for (String name : list) {
                 //add name tolist
-                System.out.println(name);
+                //System.out.println(name);
                 TreeItem child = new TreeItem(name);
                 parent.getChildren().add(child);
             }
+            parent.setExpanded(true);
             rootitem.getChildren().add(parent);
         }
     }
