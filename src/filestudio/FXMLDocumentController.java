@@ -998,34 +998,39 @@ public class FXMLDocumentController implements Initializable {
 
     public void scan() {
         File directory = new File(dupefinderInput.getText());
-        boolean hashType = false;
-        Map<String, List<String>> duplicateList = new HashMap<String, List<String>>();
-        try {
-            Finder.find(duplicateList, directory, hashType);									// FIND DUPLICATE FILES
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            alert("Duplicate Finder", "Error scanning for duplicates!", exception.getMessage(), Alert.AlertType.ERROR);
-        }
-        //dupeTree.setSelectionModel();
-        TreeItem rootitem = new TreeItem("Duplicates");
-        rootitem.setExpanded(true);
-        dupeTree.setRoot(rootitem);
-        dupeTree.setShowRoot(true);
-        for (List<String> list : duplicateList.values()) {
-            //after scan
-            if (list.size() > 1) {
-                TreeItem<String> parent = new TreeItem<>();
-                for (String name : list) {
-                    //add name tolist
-                    CheckBoxTreeItem child = new CheckBoxTreeItem(name);
-                    parent.getChildren().add(child);
+        if (directory.exists() && directory.isDirectory()) {
+            boolean hashType = false;
+            Map<String, List<String>> duplicateList = new HashMap<String, List<String>>();
+            try {
+                Finder.find(duplicateList, directory, hashType);									// FIND DUPLICATE FILES
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                alert("Duplicate Finder", "Error scanning for duplicates!", exception.getMessage(), Alert.AlertType.ERROR);
+            }
+            //dupeTree.setSelectionModel();
+            TreeItem rootitem = new TreeItem("Duplicates");
+            rootitem.setExpanded(true);
+            dupeTree.setRoot(rootitem);
+            dupeTree.setShowRoot(true);
+            for (List<String> list : duplicateList.values()) {
+                //after scan
+                if (list.size() > 1) {
+                    TreeItem parent = new TreeItem(new File(list.get(0)).getName());
+                    for (String name : list) {
+                        //add name tolist
+                        CheckBoxTreeItem child = new CheckBoxTreeItem(name);
+                        parent.getChildren().add(child);
 //                if (parent.getChildren().size() > 0) {
 //                    child.setSelected(true);
 //                }
+                    }
+                    parent.setExpanded(true);
+                    rootitem.getChildren().add(parent);
                 }
-                parent.setExpanded(true);
-                rootitem.getChildren().add(parent);
             }
+        } else {
+            alert("Invalid Path", "The path was not found!", dupefinderInput.getText(), Alert.AlertType.ERROR);
         }
     }
+
 }

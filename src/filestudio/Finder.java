@@ -79,7 +79,7 @@ public class Finder {
         return hash;
     }
 
-    // Helper method to remove non-duplicate entries
+    // NOT USED ANYMORE : Helper method to remove non-duplicate entries
     private static void removeSingleFiles(Map<String, List<String>> duplicateList) {
         Iterator<Map.Entry<String, List<String>>> iterator = duplicateList.entrySet().iterator();
         while (iterator.hasNext()) {
