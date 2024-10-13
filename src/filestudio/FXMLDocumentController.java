@@ -46,13 +46,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -994,31 +997,35 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void scan() {
-        File directory = new File(activeDir);
+        File directory = new File(dupefinderInput.getText());
         boolean hashType = false;
         Map<String, List<String>> duplicateList = new HashMap<String, List<String>>();
         try {
             Finder.find(duplicateList, directory, hashType);									// FIND DUPLICATE FILES
         } catch (Exception exception) {
             exception.printStackTrace();
-            //alert
+            alert("Duplicate Finder", "Error scanning for duplicates!", exception.getMessage(), Alert.AlertType.ERROR);
         }
+        //dupeTree.setSelectionModel();
         TreeItem rootitem = new TreeItem("Duplicates");
         rootitem.setExpanded(true);
         dupeTree.setRoot(rootitem);
         dupeTree.setShowRoot(true);
         for (List<String> list : duplicateList.values()) {
             //after scan
-            //System.out.println();
-            TreeItem<String> parent = new TreeItem<>();
-            for (String name : list) {
-                //add name tolist
-                //System.out.println(name);
-                TreeItem child = new TreeItem(name);
-                parent.getChildren().add(child);
+            if (list.size() > 1) {
+                TreeItem<String> parent = new TreeItem<>();
+                for (String name : list) {
+                    //add name tolist
+                    CheckBoxTreeItem child = new CheckBoxTreeItem(name);
+                    parent.getChildren().add(child);
+//                if (parent.getChildren().size() > 0) {
+//                    child.setSelected(true);
+//                }
+                }
+                parent.setExpanded(true);
+                rootitem.getChildren().add(parent);
             }
-            parent.setExpanded(true);
-            rootitem.getChildren().add(parent);
         }
     }
 }

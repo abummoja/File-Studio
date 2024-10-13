@@ -10,6 +10,7 @@ import java.io.RandomAccessFile;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class Finder {
                 copyList.add(object.getAbsolutePath());
             }
         }
+        //removeSingleFiles(duplicateList);
     }
 
     private static String hashQuick(File inputFile) throws Exception {
@@ -77,4 +79,14 @@ public class Finder {
         return hash;
     }
 
+    // Helper method to remove non-duplicate entries
+    private static void removeSingleFiles(Map<String, List<String>> duplicateList) {
+        Iterator<Map.Entry<String, List<String>>> iterator = duplicateList.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, List<String>> entry = iterator.next();
+            if (entry.getValue().size() == 1) {
+                iterator.remove(); // Remove if only one file in the list (no duplicates)
+            }
+        }
+    }
 }
