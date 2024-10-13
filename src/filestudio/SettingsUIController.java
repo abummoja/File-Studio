@@ -71,8 +71,8 @@ public class SettingsUIController implements Initializable {
     /**
      * Initializes the controller class.
      *
-     * @param url
-     * @param rb
+     * @param url the URL?
+     * @param rb a resource bundle
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -105,14 +105,6 @@ public class SettingsUIController implements Initializable {
         int j = 0;
         String substr = btnId.length() < 3 ? btnId : btnId.substring(0, 3);
         System.out.println(substr);
-        //CharSequence s = substr;
-//        for (TextField tfx : fields) {
-//            if (tfx != null && tfx.getId().startsWith(substr)) {
-//                openDirChooser(tfx.getPromptText(), tfx);
-//            } else {
-//                System.out.println("Can not find text field");
-//            }
-//        }
         switch (btnId) {
             //open dir chooser and pass the title as the textfields hint and the textfield respectively so the return is automatically pasted
             case "appsBtn":
@@ -212,8 +204,6 @@ public class SettingsUIController implements Initializable {
             if (!changesMade) {
                 changesMade = true;
             }
-        } else {
-            openDirChooser(title, tf);
         }
     }
 
