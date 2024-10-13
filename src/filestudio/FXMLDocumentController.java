@@ -800,18 +800,28 @@ public class FXMLDocumentController implements Initializable {
     public void openGallery() {
         String imagePath = imageUpscaleTextField.getText();
         String command = "explorer.exe \"" + imagePath + "\"";
-        Process proc;
+        String[] cmd = {"explorer.exe", imagePath};
+        Process proc = null;
         int exitcode;
-        if (imagePath != null)
+        if (imagePath != null && new File(imagePath).exists()) {
             try {
-            proc = Runtime.getRuntime().exec(command);
-            exitcode = proc.waitFor();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                ProcessBuilder pb = new ProcessBuilder(cmd);
+                pb.redirectErrorStream(true);
+                proc = pb.start();
+                //proc = Runtime.getRuntime().exec(command);
+                exitcode = proc.waitFor();
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (proc != null) {
+                    proc.destroy();
+                }
+            }
+        } else {
+            alert("Preview Failed!", "The file does not exist or is corrupt", imagePath, Alert.AlertType.ERROR);
         }
-        return;
     }
 
     public void revealImageInExplorer() {
