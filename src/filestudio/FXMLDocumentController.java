@@ -1020,9 +1020,9 @@ public class FXMLDocumentController implements Initializable {
                         //add name tolist
                         CheckBoxTreeItem child = new CheckBoxTreeItem(name);
                         parent.getChildren().add(child);
-//                if (parent.getChildren().size() > 0) {
-//                    child.setSelected(true);
-//                }
+                        if (parent.getChildren().size() > 0) {
+                            child.setSelected(true);
+                        }
                     }
                     parent.setExpanded(true);
                     rootitem.getChildren().add(parent);
@@ -1032,5 +1032,4 @@ public class FXMLDocumentController implements Initializable {
             alert("Invalid Path", "The path was not found!", dupefinderInput.getText(), Alert.AlertType.ERROR);
         }
     }
-
 }
