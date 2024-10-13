@@ -251,8 +251,16 @@ public class ArchiverController implements Initializable {
     }
 
     private String fileName(File targetDir, ZipArchiveEntry entry) {
-        File ent = new File(entry.getName());
-        return targetDir.getAbsolutePath() + "\\" + ent.getName();
+        File ent = new File(targetDir, new File(entry.getName()).toPath().normalize().toString());
+        if (!ent.toPath().startsWith(targetDir.toPath())) {
+            try {
+                throw new IOException("Bad zip entry: " + entry.getName());
+            } catch (IOException ex) {
+                Logger.getLogger(ArchiverController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return ent.getAbsolutePath();
+        //return targetDir.getAbsolutePath() + "\\" + ent.getName();
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
