@@ -1032,4 +1032,8 @@ public class FXMLDocumentController implements Initializable {
             alert("Invalid Path", "The path was not found!", dupefinderInput.getText(), Alert.AlertType.ERROR);
         }
     }
+
+    public void deleteDupes() {
+        alert("Delete duplicates", "The feature you tried to access is in development", "Will be available in next update", Alert.AlertType.INFORMATION);
+    }
 }
