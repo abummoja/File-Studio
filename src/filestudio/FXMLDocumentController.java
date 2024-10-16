@@ -59,6 +59,7 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -1008,20 +1009,25 @@ public class FXMLDocumentController implements Initializable {
                 alert("Duplicate Finder", "Error scanning for duplicates!", exception.getMessage(), Alert.AlertType.ERROR);
             }
             //dupeTree.setSelectionModel();
-            TreeItem rootitem = new TreeItem("Duplicates");
+            CheckBoxTreeItem<String> rootitem = new CheckBoxTreeItem<>("Duplicates");
             rootitem.setExpanded(true);
             dupeTree.setRoot(rootitem);
+            dupeTree.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
             dupeTree.setShowRoot(true);
             for (List<String> list : duplicateList.values()) {
                 //after scan
                 if (list.size() > 1) {
-                    TreeItem parent = new TreeItem(new File(list.get(0)).getName());
+                    int pi = 0;
+                    CheckBoxTreeItem<String> parent = new CheckBoxTreeItem<>(new File(list.get(0)).getName());
                     for (String name : list) {
                         //add name tolist
+                        pi++;
                         CheckBoxTreeItem child = new CheckBoxTreeItem(name);
                         parent.getChildren().add(child);
-                        if (parent.getChildren().size() > 0) {
+                        if (pi >= 2) {
                             child.setSelected(true);
+                        } else {
+                            child.setSelected(false);
                         }
                     }
                     parent.setExpanded(true);
