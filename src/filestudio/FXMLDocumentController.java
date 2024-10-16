@@ -1040,6 +1040,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void deleteDupes() {
-        alert("Delete duplicates", "The feature you tried to access is in development", "Will be available in next update", Alert.AlertType.INFORMATION);
+        System.out.println(dupeTree.getSelectionModel().getSelectedItems());
+        //alert("Delete duplicates", "The feature you tried to access is in development", "Will be available in next update", Alert.AlertType.INFORMATION);
     }
 }
