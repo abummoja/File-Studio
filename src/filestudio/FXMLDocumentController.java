@@ -996,6 +996,7 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
+    List<CheckBoxTreeItem<String>> selectedItems;
 
     public void scan() {
         File directory = new File(dupefinderInput.getText());
@@ -1033,14 +1034,40 @@ public class FXMLDocumentController implements Initializable {
                     parent.setExpanded(true);
                     rootitem.getChildren().add(parent);
                 }
+                selectedItems = getSelectedItems(rootitem);
+
             }
         } else {
-            alert("Invalid Path", "The path was not found!", dupefinderInput.getText(), Alert.AlertType.ERROR);
+            alert("PathScanner.exe[embedded] - Invalid Path", "The path was not found!", dupefinderInput.getText(), Alert.AlertType.ERROR);
         }
     }
 
     public void deleteDupes() {
         System.out.println(dupeTree.getSelectionModel().getSelectedItems());
+        for (TreeItem<String> itm : selectedItems) {
+            File iFile = new File(itm.getValue());
+            if (iFile.exists()) {
+                iFile.delete();
+            } else {
+                alert("InternalFS.so[embedded]", "The file " + itm.getValue() + " was not found!", "Will proceed with other available files.", Alert.AlertType.INFORMATION);
+            }
+        }
+        try {
+            dupeTree.refresh();
+        } catch (Exception any) {
+            alert("DupeFinder[embedded].exe - Issue", "Not an error, just a bug", "Failed to refresh list", Alert.AlertType.INFORMATION);
+        }
         //alert("Delete duplicates", "The feature you tried to access is in development", "Will be available in next update", Alert.AlertType.INFORMATION);
+    }
+
+    private List<CheckBoxTreeItem<String>> getSelectedItems(CheckBoxTreeItem<String> rootitem) {
+        List<CheckBoxTreeItem<String>> selectedItems = new ArrayList<>();
+        if (rootitem.isSelected()) {
+            selectedItems.add(rootitem);
+        }
+        for (TreeItem<String> child : rootitem.getChildren()) {
+            selectedItems.addAll(getSelectedItems((CheckBoxTreeItem<String>) child));
+        }
+        return selectedItems;
     }
 }
