@@ -172,7 +172,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        checkForUpdates();
+        //checkForUpdates();
         checkHistory();
         userTitle.setText(Util.user + " | " + Util.os);
         File[] rootDrive = File.listRoots();
