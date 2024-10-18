@@ -173,7 +173,6 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //checkForUpdates();
-        checkHistory();
         userTitle.setText(Util.user + " | " + Util.os);
         File[] rootDrive = File.listRoots();
         for (File diskDrive : rootDrive) {
@@ -258,6 +257,7 @@ public class FXMLDocumentController implements Initializable {
 
             //System.out.println((Math.round((di.getUsableSpace() / 1024 / 1024) * 100)));
         });
+        checkHistory();
         histList.getSelectionModel().selectedItemProperty().addListener(listener -> {
             String ss = histList.getSelectionModel().getSelectedItem();
             dirProperties.setText(ss);
@@ -266,14 +266,6 @@ public class FXMLDocumentController implements Initializable {
             compressorPath.setText(activeDir);
             compressorDest.setText(new File(ss).getParent());
         });
-
-        /*diskList.setCellFactory(new Callback<ListView<DiskInfo>, ListCell<DiskInfo>>(){
-            @Override
-            public ListCell<DiskInfo> call(ListView<DiskInfo> diskList) {
-                return new DiskInfoCell();
-                //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-            }
-        });*/
         mainWindowHandle.setOnMousePressed(pressEvent -> {
             mainWindowHandle.setOnMouseDragged(dragEvent -> {
                 mainWindowHandle.getScene().getWindow().setX(dragEvent.getScreenX() - pressEvent.getSceneX());
@@ -1049,11 +1041,11 @@ public class FXMLDocumentController implements Initializable {
             if (iFile.exists()) {
                 iFile.delete();
             } else {
-                alert("InternalFS.so[embedded]", "The file " + itm.getValue() + " was not found!", "Will proceed with other available files.", Alert.AlertType.INFORMATION);
+                alert("InternalFS.o[embedded]", "The file " + itm.getValue() + " was not found!", "Will proceed with other available files.", Alert.AlertType.INFORMATION);
             }
         }
         try {
-            dupeTree.refresh();
+            scan();//rescan the dir to update the list
         } catch (Exception any) {
             alert("DupeFinder[embedded].exe - Issue", "Not an error, just a bug", "Failed to refresh list", Alert.AlertType.INFORMATION);
         }
