@@ -265,6 +265,8 @@ public class FXMLDocumentController implements Initializable {
             organizerDirTextField.setText(activeDir);
             compressorPath.setText(activeDir);
             compressorDest.setText(new File(ss).getParent());
+            dirProperties.setText(new File(ss).getAbsolutePath());
+            dupefinderInput.setText(activeDir);
         });
         mainWindowHandle.setOnMousePressed(pressEvent -> {
             mainWindowHandle.setOnMouseDragged(dragEvent -> {
@@ -511,7 +513,9 @@ public class FXMLDocumentController implements Initializable {
             List<String> sel = new ArrayList<>();
             sel.add(activeDir);
             for (String sd : jh.readFromJson()) {
-                sel.add(sd);
+                if (!sd.equals(activeDir)) {
+                    sel.add(sd);
+                }
             }
             jh.deleteData();
             jh.writeToJson(sel);
