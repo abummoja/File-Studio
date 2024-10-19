@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
@@ -58,6 +62,10 @@ public class SettingsUIController implements Initializable {
     AnchorPane mainWindowHandle;
     @FXML
     Label aboutLabel;
+    @FXML
+    ToggleButton themeToggle;
+    @FXML
+    Label infoLabel;
 
     UserSettings uss = new UserSettings();
     boolean changesMade = false;
@@ -65,7 +73,7 @@ public class SettingsUIController implements Initializable {
     //@FXML
     Button[] changeButtons = {appsBtn, documentsBtn, archivesBtn, videosBtn, picturesBtn, musicBtn};
     TextField[] fields = {appsPathField, documentsPathField, archivesPathField, videosPathField, picturesPathField, musicPathField};
-
+    String theme = uss.theme;
     static Stage mStage;//for closing window
 
     /**
@@ -89,6 +97,17 @@ public class SettingsUIController implements Initializable {
         archivesPathField.setText(uss.archdir);
         picturesPathField.setText(uss.picdir);
         documentsPathField.setText(uss.docsdir);
+        themeToggle.setTooltip(new Tooltip("The active theme is not written in the theme button."));
+        switch (uss.theme) {
+            case "light":
+                themeToggle.setText("Dark Mode");
+                break;
+            case "dark":
+                themeToggle.setText("Light Theme");
+                break;
+            default:
+                themeToggle.setText("Theme");
+        }
         aboutLabel.setText("This Version : " + FXMLDocumentController.ver
                 + "\n (c)2024 Abraham Moruri"
                 + "\n Project License : Apache 2.0"
@@ -96,6 +115,19 @@ public class SettingsUIController implements Initializable {
                 + "\n SourceForge (Download): https://sourceforge.net/projects/filestudio"
                 + "\n This is a free and open-source project and only profits from donations."
                 + "\n Consider donating through : " + FXMLDocumentController.pd);
+        themeToggle.selectedProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                infoLabel.setText("Restart App For Theme Change");
+                if (themeToggle.getText().equals("Light Theme")) {
+                    themeToggle.setText("Dark Mode");
+                    theme = "light";
+                } else if (themeToggle.getText().equals("Dark Mode")) {
+                    themeToggle.setText("Light Theme");
+                    theme = "dark";
+                }
+            }
+        });
     }
 
     @FXML
@@ -172,6 +204,7 @@ public class SettingsUIController implements Initializable {
         uss.setDir("mp4dir", videosPathField.getText());
         uss.setDir("archdir", archivesPathField.getText());
         uss.setDir("picdir", appsPathField.getText());
+        uss.setDir("theme", theme);
         uss.saveSettings();
         if (changesMade) {
             changesMade = false;

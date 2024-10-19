@@ -25,6 +25,7 @@ public class UserSettings {
     public String archdir = pref.get("archdir", "C:\\Users\\" + unm + "\\Archives\\FileStudio");
     public String appsdir = pref.get("appsdir", "C:\\Users\\" + unm + "\\Apps");
     public String docsdir = pref.get("docsdir", "C:\\Users\\" + unm + "\\Documents\\FileStudio");
+    public String theme = pref.get("theme", "dark");
     public String[] dirs = {mp3dir, mp4dir, picdir, archdir, appsdir, docsdir};
     public boolean isSettingsPageOpen = false;
 
@@ -44,6 +45,7 @@ public class UserSettings {
         setDir("archdir", "C:\\Users\\" + unm + "\\Archives\\FileStudio");
         setDir("appsdir", "C:\\Users\\" + unm + "\\Apps");
         setDir("docsdir", "C:\\Users\\" + unm + "\\Documents\\FileStudio");
+        setDir("theme", "dark");//setDir can update any pref value including theme string
         saveSettings();
         createDir(dirs);
     }

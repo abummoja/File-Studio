@@ -425,6 +425,16 @@ public class FXMLDocumentController implements Initializable {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("SettingsUI.fxml"));
             Scene scene = new Scene(root);
+            switch (uss.theme) {
+                case "dark":
+                    scene.getStylesheets().add("filestudio/style.css");
+                    break;
+                case "light":
+                    scene.getStylesheets().add("filestudio/light.css");
+                    break;
+                default:
+                    scene.getStylesheets().add("filestudio/style.css");
+            }
             stage.setScene(scene);
             stage.initStyle(StageStyle.UNDECORATED);
             Image i = new Image(getClass().getResourceAsStream("FileStudioOtherIcon.png"));
@@ -490,21 +500,23 @@ public class FXMLDocumentController implements Initializable {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setInitialDirectory(new File("C://Users/" + Util.user));
         File selectedFolder = dirChooser.showDialog(userTitle.getScene().getWindow());
-        dirProperties.setText(selectedFolder.getAbsolutePath());
-        activeDir = selectedFolder.getAbsolutePath();
-        organizerDirTextField.setText(activeDir);
-        compressorPath.setText(activeDir);
-        dupefinderInput.setText(activeDir);
-        compressorDest.setText(selectedFolder.getParent());
-        JsonHandler jh = new JsonHandler();
-        List<String> sel = new ArrayList<>();
-        sel.add(activeDir);
-        for (String sd : jh.readFromJson()) {
-            sel.add(sd);
+        if (selectedFolder != null && selectedFolder.exists()) {
+            dirProperties.setText(selectedFolder.getAbsolutePath());
+            activeDir = selectedFolder.getAbsolutePath();
+            organizerDirTextField.setText(activeDir);
+            compressorPath.setText(activeDir);
+            dupefinderInput.setText(activeDir);
+            compressorDest.setText(selectedFolder.getParent());
+            JsonHandler jh = new JsonHandler();
+            List<String> sel = new ArrayList<>();
+            sel.add(activeDir);
+            for (String sd : jh.readFromJson()) {
+                sel.add(sd);
+            }
+            jh.deleteData();
+            jh.writeToJson(sel);
+            checkHistory();
         }
-        jh.deleteData();
-        jh.writeToJson(sel);
-        checkHistory();
     }
 
     //[UNFINISHED&BUGGY] Method to get 'recent directories' list on Welcome Screen

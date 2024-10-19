@@ -14,9 +14,6 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="mainWindowHandle" prefHeight="456.0" prefWidth="641.0" style="-fx-border-color: dodgerblue;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="filestudio.SettingsUIController">
-    <stylesheets>
-        <URL value="@style.css" />
-    </stylesheets>
     <children>
         <Button fx:id="closeWindowBtn" layoutX="609.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#closeWindow" style="-fx-background-color: red;" textFill="RED" />
         <Label layoutX="14.0" layoutY="5.0" prefHeight="43.0" prefWidth="119.0" text="Settings">
@@ -54,38 +51,38 @@
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
                                 <Label layoutX="14.0" layoutY="14.0" text="Choose your preffered GUI Options" />
-                                <ToggleButton layoutX="11.0" layoutY="76.0" mnemonicParsing="false" text="Light Mode" />
+                                <ToggleButton fx:id="themeToggle" layoutX="11.0" layoutY="76.0" mnemonicParsing="false" text="Light Mode" />
                                 <CheckBox layoutX="11.0" layoutY="111.0" mnemonicParsing="false" text="Switch To New UI" />
-                        <Label layoutX="14.0" layoutY="44.0" text="This page is not yet functional.">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
+                                <Label fx:id="infoLabel" layoutX="14.0" layoutY="44.0" text="This page is not yet functional.">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
                             </children>
                         </AnchorPane>
                     </content>
                 </Tab>
-            <Tab closable="false" text="About">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@FileStudioMainIcon.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="186.0" layoutY="22.0" text="File Studio">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="aboutLabel" alignment="TOP_LEFT" layoutX="186.0" layoutY="81.0" prefHeight="189.0" prefWidth="410.0" text="version" />
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
+                <Tab closable="false" text="About">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@FileStudioMainIcon.png" />
+                                    </image>
+                                </ImageView>
+                                <Label layoutX="186.0" layoutY="22.0" text="File Studio">
+                                    <font>
+                                        <Font size="40.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="aboutLabel" alignment="TOP_LEFT" layoutX="186.0" layoutY="81.0" prefHeight="189.0" prefWidth="410.0" text="version" />
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
-      <Button layoutX="417.0" layoutY="417.0" mnemonicParsing="false" onAction="#resetToDefault" style="-fx-background-color: black;" text="Reset" />
+        <Button layoutX="417.0" layoutY="417.0" mnemonicParsing="false" onAction="#resetToDefault" style="-fx-background-color: black;" text="Reset" />
     </children>
 </AnchorPane>

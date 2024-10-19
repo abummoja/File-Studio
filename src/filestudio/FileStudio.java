@@ -20,6 +20,8 @@ import javafx.stage.StageStyle;
  */
 public class FileStudio extends Application {
 
+    UserSettings uss = new UserSettings();
+
     @Override
     public void start(Stage stage) throws Exception {
         //TO-DO: Read prefs to check if user has selected newUI or just launch old Ui
@@ -27,7 +29,19 @@ public class FileStudio extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
             Scene scene = new Scene(root);
+            //stylesheets="@style.css"
+            switch (uss.theme) {
+                case "dark":
+                    scene.getStylesheets().add("filestudio/style.css");
+                    break;
+                case "light":
+                    scene.getStylesheets().add("filestudio/light.css");
+                    break;
+                default:
+                    scene.getStylesheets().add("filestudio/style.css");
+            }
 
+            //getClass().getResource("style.css").getFile()
             stage.setScene(scene);
             //stage.setIconified(true); //launches the app in minimized state
             //File f = new File(getClass().getResource("FileStudioMain.ico").getFile());
