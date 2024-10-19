@@ -66,6 +66,8 @@ public class SettingsUIController implements Initializable {
     ToggleButton themeToggle;
     @FXML
     Label infoLabel;
+    @FXML
+    Button clearHistBtn;
 
     UserSettings uss = new UserSettings();
     boolean changesMade = false;
@@ -157,6 +159,25 @@ public class SettingsUIController implements Initializable {
             case "documentsBtn":
                 openDirChooser(documentsPathField.getPromptText(), documentsPathField);
                 break;
+            case "clearHistBtn":
+                JsonHandler jh = new JsonHandler();
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Clear History?");
+                alert.setHeaderText("Are you sure to clear recent workspaces list?");
+                alert.setContentText("This action will clear the list of recent folders present in the home screen.");
+                ButtonType yesBtn = new ButtonType("Yes");
+                ButtonType noBtn = new ButtonType("No");
+                alert.getButtonTypes().setAll(yesBtn, noBtn);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent()) {
+                    if (result.get() == yesBtn) {
+                        jh.deleteData();
+                    } else if (result.get() == noBtn) {
+                        alert.close();
+                    } else {
+                        //return;
+                    }
+                }
             default:
                 System.out.println(btnId + " cannot be used!");
                 break;
